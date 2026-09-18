@@ -3,30 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kids Computer Flashcards</title>
+    <title>Clean Flashcards</title>
     
-    <!-- Playful Google Font: Quicksand -->
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS for rapid styling -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Confetti for the completion screen -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
-            /* Pastel Theme Variables */
-            --bg-gradient: linear-gradient(135deg, #fdf4ff 0%, #e0e7ff 100%);
-            --card-border: #c7d2fe;
-            --btn-blue: #a78bfa;
-            --btn-blue-shadow: #8b5cf6;
-            --btn-green: #34d399;
-            --btn-green-shadow: #10b981;
-            --btn-yellow: #fbbf24;
-            --btn-yellow-shadow: #d97706;
-            --btn-red: #f472b6;
-            --btn-red-shadow: #db2777;
+            --bg-gradient: linear-gradient(135deg, #f0f4ff 0%, #eef2ff 100%);
         }
 
         body {
@@ -34,228 +19,236 @@
             background: var(--bg-gradient);
             margin: 0;
             padding: 0;
-            height: 100vh; /* Fallback */
-            height: 100dvh; /* Mobile browser friendly */
+            height: 100vh;
+            height: 100dvh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             user-select: none;
             -webkit-user-select: none;
-            color: #475569;
+            color: #334155;
         }
 
-        /* Fun, chunky buttons for kids */
-        .btn-chunky {
-            position: relative;
-            border-radius: 1.5rem;
-            border: none;
-            color: white;
-            font-weight: 700;
-            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateY(0);
+        /* Clean Flat Buttons */
+        .btn-action {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: none;
         }
-        .btn-chunky:active {
-            transform: translateY(6px);
-            box-shadow: none !important;
+        .btn-action:active {
+            transform: scale(0.90);
         }
 
-        .btn-primary { background-color: var(--btn-blue); box-shadow: 0 8px 0 0 var(--btn-blue-shadow); border: 2px solid var(--btn-blue-shadow); }
-        .btn-success { background-color: var(--btn-green); box-shadow: 0 8px 0 0 var(--btn-green-shadow); border: 2px solid var(--btn-green-shadow); }
-        .btn-warning { background-color: var(--btn-yellow); box-shadow: 0 8px 0 0 var(--btn-yellow-shadow); border: 2px solid var(--btn-yellow-shadow); }
-        .btn-danger { background-color: var(--btn-red); box-shadow: 0 8px 0 0 var(--btn-red-shadow); border: 2px solid var(--btn-red-shadow); }
-
-        /* Card flip mechanics */
-        .card-container {
-            perspective: 1500px;
-            flex-grow: 1;
-            margin: 1rem;
-            position: relative;
-        }
-        .card-inner {
+        /* Card Stage & Animations */
+        .card-stage {
+            perspective: 1200px;
             width: 100%;
             height: 100%;
-            position: absolute;
-            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy flip */
-            transform-style: preserve-3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .flipped .card-inner { transform: rotateY(180deg); }
-        
+
+        .swipe-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            will-change: transform, opacity;
+        }
+
+        .swipe-out-left {
+            animation: swipeOut 0.25s forwards cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .swipe-in-right {
+            animation: swipeIn 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        @keyframes swipeOut {
+            to { transform: translateX(-100%) rotate(-5deg); opacity: 0; }
+        }
+        @keyframes swipeIn {
+            from { transform: translateX(100%) rotate(5deg); opacity: 0; }
+            to { transform: translateX(0) rotate(0deg); opacity: 1; }
+        }
+
+        .card-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+        }
+        .card-container.flipped {
+            transform: rotateY(180deg);
+        }
+        .no-transition {
+            transition: none !important;
+        }
+
         .card-face {
             position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
-            border-radius: 2rem;
-            background-color: white;
-            border: 4px solid var(--card-border);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-radius: 1.75rem;
+            background-color: #ffffff;
+            border: 3px solid #e0e7ff;
+            box-shadow: 0 12px 35px -12px rgba(99, 102, 241, 0.15);
             display: flex;
             flex-direction: column;
-            padding: 1.5rem;
-            overflow-y: auto;
+            justify-content: center; /* Centers content vertically */
+            align-items: center;     /* Centers content horizontally */
+            text-align: center;      /* Centers text */
+            padding: 2.5rem;
+            box-sizing: border-box;
         }
-        .card-back { transform: rotateY(180deg); border-color: #fbcfe8; }
 
-        /* Cute Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+        .card-back {
+            transform: rotateY(180deg);
+            border-color: #fce7f3;
+        }
 
-        /* Thick Progress Bar */
+        /* Minimal Progress Bar */
         .progress-track {
             background-color: #e2e8f0;
             border-radius: 9999px;
-            height: 28px;
             width: 100%;
-            border: 3px solid white;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
             overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
             position: relative;
         }
         .progress-fill {
-            background: linear-gradient(90deg, #f472b6, #a78bfa);
+            background: linear-gradient(90deg, #818cf8, #c084fc);
             height: 100%;
             border-radius: 9999px;
-            transition: width 0.4s ease-out;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+            left: 0;
+            top: 0;
         }
 
-        /* View toggling */
-        .view { display: none; flex-direction: column; height: 100%; width: 100%; max-width: 600px; margin: 0 auto; }
-        .view.active { display: flex; }
-        
-        .floating { animation: float 3s ease-in-out infinite; }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        .view {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
         }
+        .view.active { display: flex; }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="view-study" class="view active relative p-4">
-        <!-- Header / Progress -->
-        <div class="flex-none pt-2 pb-4 text-center">
-            <h1 class="text-2xl font-bold text-indigo-500 mb-2">🌸 Study Time!</h1>
-            <div class="flex items-center gap-3">
-                <span class="text-2xl">🦄</span>
-                <div class="progress-track flex-grow">
-                    <div id="study-progress-fill" class="progress-fill" style="width: 0%;"></div>
-                </div>
-                <span id="study-progress-text" class="text-xl font-bold text-slate-600 w-16 text-right">0/80</span>
-            </div>
-        </div>
-
-        <!-- Flashcard -->
-        <div id="study-card" class="card-container cursor-pointer w-full">
-            <div class="card-inner">
-                <!-- Front -->
-                <div class="card-face flex flex-col justify-center items-center text-center">
-                    <span class="text-sm font-bold text-indigo-400 uppercase tracking-wider mb-4 bg-indigo-50 px-4 py-1 rounded-full">Question</span>
-                    <p id="study-q-text" class="text-2xl font-bold text-slate-700 leading-snug my-auto px-2">Loading...</p>
-                    <div class="mt-4 text-indigo-300 floating text-sm font-bold">Tap card to flip! ✨</div>
-                </div>
-                <!-- Back -->
-                <div class="card-face card-back flex flex-col justify-center items-center text-center">
-                    <span class="text-sm font-bold text-pink-400 uppercase tracking-wider mb-4 bg-pink-50 px-4 py-1 rounded-full">Answer</span>
-                    <p id="study-a-text" class="text-2xl font-bold text-slate-700 leading-snug my-auto px-2">Loading...</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Controls -->
-        <div class="flex-none pt-6 pb-2 h-32 flex flex-col justify-end">
-            <!-- Show Answer Button -->
-            <button id="btn-show-answer" class="btn-chunky btn-primary w-full py-4 text-2xl">
-                👁️ Show Answer
+    <!-- STUDY FLASHCARD VIEW -->
+    <div id="view-study" class="view active px-5 py-5 justify-between relative">
+        
+        <!-- Header: Reset & Progress Bar Combined -->
+        <div class="flex items-center gap-4 w-full mb-8 mt-2 max-w-sm mx-auto">
+            <button id="btn-reset" class="w-10 h-10 rounded-full bg-white text-slate-500 shadow-sm border-2 border-slate-100 flex items-center justify-center active:scale-90 transition" aria-label="Reset">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
             </button>
-            
-            <!-- Rating Buttons -->
-            <div id="study-rating-btns" class="hidden flex-row gap-3 w-full h-full items-end">
-                <button id="btn-again" class="btn-chunky btn-danger flex-1 py-3 flex-col text-lg leading-tight">
-                    <span class="text-3xl">🔄</span><span>Again</span>
-                </button>
-                <button id="btn-hard" class="btn-chunky btn-warning flex-1 py-3 flex-col text-lg leading-tight">
-                    <span class="text-3xl">🤔</span><span>Hard</span>
-                </button>
-                <button id="btn-got-it" class="btn-chunky btn-success flex-1 py-3 flex-col text-lg leading-tight">
-                    <span class="text-3xl">⭐</span><span>Got It!</span>
-                </button>
+            <div class="progress-track h-8">
+                <div id="study-progress-fill" class="progress-fill" style="width: 0%;"></div>
+                <!-- Number Counter strictly inside the progress bar -->
+                <div id="study-counter-chip" class="absolute inset-0 flex items-center justify-center text-[13px] font-bold text-slate-700 tracking-widest z-10">
+                    1 / 80
+                </div>
             </div>
         </div>
+
+        <!-- Centered Card Canvas -->
+        <div class="flex-1 w-full max-w-sm mx-auto flex items-center justify-center relative my-auto min-h-[340px] max-h-[440px]">
+            <div class="card-stage">
+                <div id="swipe-wrapper" class="swipe-wrapper">
+                    <div id="study-card" class="card-container cursor-pointer w-full h-full">
+                        <!-- Front (Question) -->
+                        <div class="card-face">
+                            <span class="absolute top-6 text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Question</span>
+                            <div class="overflow-y-auto w-full max-h-full py-6 flex items-center justify-center">
+                                <p id="study-q-text" class="text-2xl font-bold text-slate-800 leading-snug">Loading...</p>
+                            </div>
+                        </div>
+                        <!-- Back (Answer) -->
+                        <div class="card-face card-back">
+                            <span class="absolute top-6 text-xs font-bold text-indigo-400 uppercase tracking-[0.2em]">Answer</span>
+                            <div class="overflow-y-auto w-full max-h-full py-6 flex items-center justify-center">
+                                <p id="study-a-text" class="text-xl font-bold text-slate-700 leading-relaxed">Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sized Evaluation Controls with Labels -->
+        <div class="w-full max-w-sm mx-auto pt-8 pb-4">
+            <div class="flex justify-center gap-10">
+                <div class="flex flex-col items-center gap-3">
+                    <button id="btn-wrong" class="btn-action w-20 h-20 bg-rose-100 text-rose-600 shadow-sm hover:bg-rose-200" aria-label="Wrong">
+                        <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                    <span class="text-slate-500 font-semibold text-sm">Not sure</span>
+                </div>
+                
+                <div class="flex flex-col items-center gap-3">
+                    <button id="btn-correct" class="btn-action w-20 h-20 bg-emerald-100 text-emerald-600 shadow-sm hover:bg-emerald-200" aria-label="Correct">
+                        <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                    </button>
+                    <span class="text-slate-500 font-semibold text-sm">I know this!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Button for Study List (Smaller, Book Icon) -->
+        <button id="btn-list-view" class="fixed bottom-6 right-6 bg-white text-indigo-600 w-12 h-12 rounded-full shadow-lg shadow-indigo-100 flex items-center justify-center active:scale-90 transition z-50 hover:bg-indigo-50" aria-label="Study Mode">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+        </button>
     </div>
 
+    <!-- QUICK STUDY LIST VIEW -->
+    <div id="view-list" class="view px-5 py-6 bg-[#f8fafc] relative">
+        <div class="flex items-center justify-center pb-5 border-b-2 border-slate-200 mb-4 sticky top-0 bg-[#f8fafc] z-10">
+            <h2 class="text-xl font-bold text-slate-800 tracking-wide">Study Mode</h2>
+        </div>
+        
+        <div id="qa-list-container" class="flex-1 overflow-y-auto pr-2 space-y-4 pb-20">
+            <!-- Populated dynamically -->
+        </div>
+
+        <!-- Floating Back Button (White Icon) -->
+        <button id="btn-back-cards" class="fixed bottom-6 right-6 bg-indigo-500 text-white w-12 h-12 rounded-full shadow-lg shadow-indigo-200 flex items-center justify-center active:scale-90 transition z-50 hover:bg-indigo-600 border-[3px] border-white">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- COMPLETION VIEW -->
     <div id="view-complete" class="view items-center justify-center p-6 text-center">
-        <div class="floating mb-6 text-8xl">🎉</div>
-        <h1 class="text-4xl font-bold text-indigo-500 mb-2">Awesome Job!</h1>
-        <p class="text-xl text-slate-600 font-bold mb-8">All cards completed!</p>
+        <h1 class="text-4xl font-bold text-slate-800 mb-4">You Rock! 🚀</h1>
+        <p class="text-slate-500 font-bold mb-10 text-lg">You've finished the whole deck.</p>
         
-        <div class="flex flex-col gap-4 w-full px-2">
-            <button id="btn-review-weak" class="btn-chunky btn-warning w-full py-4 text-xl hidden">
-                🩹 Review Weak Cards
+        <div class="flex flex-col gap-4 w-full max-w-xs">
+            <button id="btn-review-missed" class="bg-indigo-50 border-2 border-indigo-100 text-indigo-700 font-bold py-4 rounded-2xl text-lg hidden active:scale-95 transition">
+                Review Missed
             </button>
-            <button id="btn-start-test" class="btn-chunky btn-primary w-full py-4 text-xl">
-                📝 Start Final Test
-            </button>
-            <button id="btn-restart" class="btn-chunky btn-danger w-full py-4 text-xl">
-                🔄 Study All Again
-            </button>
-        </div>
-    </div>
-
-    <div id="view-test" class="view relative p-4">
-        <div class="flex-none pt-2 pb-4 text-center">
-            <h1 class="text-2xl font-bold text-pink-500 mb-2">📝 Final Test Mode</h1>
-            <p id="test-progress-text" class="text-lg font-bold text-slate-500">Question 1 of 80</p>
-        </div>
-
-        <div id="test-card" class="card-container w-full">
-            <div class="card-inner">
-                <div class="card-face flex flex-col justify-center items-center text-center">
-                    <p id="test-q-text" class="text-2xl font-bold text-slate-700 leading-snug my-auto px-2"></p>
-                </div>
-                <div class="card-face card-back flex flex-col justify-center items-center text-center">
-                    <p id="test-a-text" class="text-2xl font-bold text-slate-700 leading-snug my-auto px-2"></p>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex-none pt-6 pb-2 h-32 flex flex-col justify-end">
-            <button id="btn-test-show" class="btn-chunky btn-primary w-full py-4 text-2xl">
-                👁️ Reveal Answer
-            </button>
-            <div id="test-rating-btns" class="hidden flex-row gap-4 w-full h-full items-end">
-                <button id="btn-test-wrong" class="btn-chunky btn-danger flex-1 py-4 text-xl flex-col">
-                    <span class="text-3xl mb-1">❌</span><span>Oops</span>
-                </button>
-                <button id="btn-test-right" class="btn-chunky btn-success flex-1 py-4 text-xl flex-col">
-                    <span class="text-3xl mb-1">✅</span><span>Knew It!</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="view-results" class="view items-center justify-center p-6 text-center">
-        <div class="floating mb-4 text-8xl">🏆</div>
-        <h1 class="text-4xl font-bold text-indigo-500 mb-6">Test Results</h1>
-        
-        <div class="bg-white rounded-3xl p-6 w-full border-4 border-indigo-100 shadow-lg mb-8 text-xl font-bold">
-            <div class="flex justify-between text-indigo-500 mb-3"><span>Questions:</span> <span id="res-total">0</span></div>
-            <div class="flex justify-between text-emerald-500 mb-3"><span>Correct:</span> <span id="res-right">0</span></div>
-            <div class="flex justify-between text-pink-500"><span>Missed:</span> <span id="res-wrong">0</span></div>
-        </div>
-
-        <div class="flex flex-col gap-4 w-full">
-            <button id="btn-review-mistakes" class="btn-chunky btn-warning w-full py-4 text-xl hidden">
-                🔍 Review Mistakes
-            </button>
-            <button id="btn-home" class="btn-chunky btn-primary w-full py-4 text-xl">
-                🏠 Back to Start
+            <button id="btn-restart-all" class="bg-slate-800 text-white font-bold py-4 rounded-2xl text-lg active:scale-95 transition shadow-lg shadow-slate-300">
+                Play Again
             </button>
         </div>
     </div>
@@ -298,7 +291,7 @@
             { id: 34, q: "34. What are utility programs?", a: "Utility programs are programs that help the computer perform better and play an important role in the regular upkeep and maintenance of the computer." },
             { id: 35, q: "35. How do utility programs contribute to the performance of a computer?", a: "They help the computer perform better by carrying out various maintenance and management tasks." },
             { id: 36, q: "36. What role do utility programs play in the regular upkeep and maintenance of a computer?", a: "They perform tasks concerned with the upkeep, maintenance and proper functioning of the computer." },
-            { id: 37, q: "37. Where are utility programs often built in?", a: "Utility programs are often built into the operating system." },
+            { id: 37, q: "37. Where are utility programs often built in?", a: "Utility programs often built into the operating system." },
             { id: 38, q: "38. What is Win Zip, according to the chapter?", a: "Win Zip is given as an example of a utility program." },
             { id: 39, q: "39. What does Win Zip do with files?", a: "Win Zip compresses files." },
             { id: 40, q: "40. Name four tasks for which utility programs are used according to the chapter.", a: "Utility programs are used for tasks such as file repair, backing up data, dealing with virus attacks and disk defragmentation." },
@@ -346,269 +339,162 @@
 
         let state = {
             activeQueue: [],
-            weakCards: [],
-            totalCardsInSession: 0,
+            missedCards: [],
             completedCount: 0,
-            
-            // Test Mode State
-            testQueue: [],
-            testMistakes: [],
-            testIndex: 0,
-            testCorrect: 0
+            totalInitial: ALL_QUESTIONS.length
         };
 
-        const STORAGE_KEY = 'kids_flashcard_state_v1';
-
-        function saveState() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        }
-
-        function loadState() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    // Minimal validation to ensure format is right
-                    if (parsed && Array.isArray(parsed.activeQueue)) {
-                        state = parsed;
-                        return true;
-                    }
-                } catch(e) {}
-            }
-            return false;
-        }
+        const swipeWrapper = document.getElementById('swipe-wrapper');
+        const studyCard = document.getElementById('study-card');
+        const studyQText = document.getElementById('study-q-text');
+        const studyAText = document.getElementById('study-a-text');
+        const counterChip = document.getElementById('study-counter-chip');
+        const progressBar = document.getElementById('study-progress-fill');
 
         function switchView(viewId) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
         }
 
-        const studyCard = document.getElementById('study-card');
-        const studyQText = document.getElementById('study-q-text');
-        const studyAText = document.getElementById('study-a-text');
-        
-        const btnShowAnswer = document.getElementById('btn-show-answer');
-        const ratingBtns = document.getElementById('study-rating-btns');
-        const progressBar = document.getElementById('study-progress-fill');
-        const progressText = document.getElementById('study-progress-text');
-
-        function startStudySession(mode = 'all') {
-            if (mode === 'all') {
-                // Fill queue with all IDs
-                state.activeQueue = ALL_QUESTIONS.map(q => q.id);
-            } else if (mode === 'weak') {
-                // Fill queue with weak cards
-                state.activeQueue = [...new Set(state.weakCards)]; // remove duplicates
-            }
-            
-            state.weakCards = [];
-            state.totalCardsInSession = state.activeQueue.length;
+        function resetToFirstQuestion() {
+            state.activeQueue = ALL_QUESTIONS.map(q => q.id);
+            state.missedCards = [];
             state.completedCount = 0;
-            saveState();
-            
+            state.totalInitial = ALL_QUESTIONS.length;
             switchView('view-study');
-            renderStudyCard();
+            renderCardData();
         }
 
-        function renderStudyCard() {
-            // Check for completion
+        function startMissedReview() {
+            state.activeQueue = [...new Set(state.missedCards)];
+            state.missedCards = [];
+            state.completedCount = 0;
+            state.totalInitial = state.activeQueue.length;
+            switchView('view-study');
+            renderCardData();
+        }
+
+        function renderCardData() {
             if (state.activeQueue.length === 0) {
-                showCompletionScreen();
+                showCompletion();
                 return;
             }
 
-            // Update Progress
-            const pct = (state.completedCount / state.totalCardsInSession) * 100;
-            progressBar.style.width = `${pct}%`;
-            progressText.innerText = `${state.completedCount}/${state.totalCardsInSession}`;
-
-            // Reset Card UI
-            studyCard.classList.remove('flipped');
-            btnShowAnswer.classList.remove('hidden');
-            ratingBtns.classList.add('hidden');
-            ratingBtns.classList.remove('flex');
-
-            // Load Content
             const currentId = state.activeQueue[0];
-            const qObj = ALL_QUESTIONS.find(q => q.id === currentId);
+            const qObj = ALL_QUESTIONS.find(item => item.id === currentId);
+
             studyQText.innerText = qObj.q;
             studyAText.innerText = qObj.a;
+
+            const progress = (state.completedCount / state.totalInitial) * 100;
+            progressBar.style.width = `${Math.min(100, Math.max(progress, 3))}%`;
+            counterChip.innerText = `${state.completedCount + 1} / ${state.totalInitial}`;
         }
 
-        btnShowAnswer.addEventListener('click', () => {
-            studyCard.classList.add('flipped');
-            btnShowAnswer.classList.add('hidden');
-            ratingBtns.classList.remove('hidden');
-            ratingBtns.classList.add('flex');
-        });
-
-        // Allow tapping the card to flip it too
         studyCard.addEventListener('click', () => {
-            if (!studyCard.classList.contains('flipped')) {
-                btnShowAnswer.click();
-            }
+            studyCard.classList.toggle('flipped');
         });
 
-        function handleRating(rating) {
-            const currentId = state.activeQueue.shift(); // Remove from front
+        let isAnimating = false;
+        
+        function answerCard(wasCorrect) {
+            if (isAnimating || state.activeQueue.length === 0) return;
+            isAnimating = true;
 
-            if (rating === 'again') {
-                // Insert 2-3 cards away, or at end if queue is small
-                const insertPos = Math.min(2 + Math.floor(Math.random() * 2), state.activeQueue.length);
-                state.activeQueue.splice(insertPos, 0, currentId);
-                state.weakCards.push(currentId);
-            } else if (rating === 'hard') {
-                // Insert further back (e.g., 5-8 cards away)
-                const insertPos = Math.min(5 + Math.floor(Math.random() * 4), state.activeQueue.length);
-                state.activeQueue.splice(insertPos, 0, currentId);
-                state.weakCards.push(currentId);
-            } else if (rating === 'gotit') {
-                // Gone from queue!
-                state.completedCount++;
-            }
+            swipeWrapper.classList.add('swipe-out-left');
 
-            saveState();
-            
-            // Brief timeout for visual feedback before loading next card
             setTimeout(() => {
-                renderStudyCard();
-            }, 150);
+                const currentId = state.activeQueue.shift();
+                if (!wasCorrect) {
+                    state.missedCards.push(currentId);
+                    state.activeQueue.push(currentId);
+                } else {
+                    state.completedCount++;
+                }
+
+                studyCard.classList.add('no-transition');
+                studyCard.classList.remove('flipped');
+                void studyCard.offsetWidth; 
+                studyCard.classList.remove('no-transition');
+
+                renderCardData();
+
+                swipeWrapper.classList.remove('swipe-out-left');
+                if (state.activeQueue.length > 0) {
+                    swipeWrapper.classList.add('swipe-in-right');
+                    
+                    setTimeout(() => {
+                        swipeWrapper.classList.remove('swipe-in-right');
+                        isAnimating = false;
+                    }, 300); 
+                } else {
+                    isAnimating = false; 
+                }
+
+            }, 250); 
         }
 
-        document.getElementById('btn-again').addEventListener('click', (e) => { e.stopPropagation(); handleRating('again'); });
-        document.getElementById('btn-hard').addEventListener('click', (e) => { e.stopPropagation(); handleRating('hard'); });
-        document.getElementById('btn-got-it').addEventListener('click', (e) => { e.stopPropagation(); handleRating('gotit'); });
+        document.getElementById('btn-correct').addEventListener('click', (e) => {
+            e.stopPropagation();
+            answerCard(true);
+        });
 
+        document.getElementById('btn-wrong').addEventListener('click', (e) => {
+            e.stopPropagation();
+            answerCard(false);
+        });
 
-        function showCompletionScreen() {
-            switchView('view-complete');
+        document.getElementById('btn-reset').addEventListener('click', (e) => {
+            const btn = e.currentTarget;
+            btn.style.opacity = '0.5';
             
-            // Show weak cards button only if there are weak cards
-            const weakBtn = document.getElementById('btn-review-weak');
-            if (state.weakCards.length > 0) {
-                weakBtn.classList.remove('hidden');
+            setTimeout(() => {
+                resetToFirstQuestion();
+                btn.style.opacity = '1';
+            }, 300); 
+        });
+
+        function buildStudyList() {
+            const container = document.getElementById('qa-list-container');
+            container.innerHTML = ALL_QUESTIONS.map(item => `
+                <div class="bg-white p-5 rounded-2xl border-2 border-slate-100 shadow-sm">
+                    <p class="text-base font-bold text-slate-800 mb-2">${item.q}</p>
+                    <p class="text-sm font-semibold text-slate-500">${item.a}</p>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('btn-list-view').addEventListener('click', () => {
+            buildStudyList();
+            switchView('view-list');
+        });
+
+        document.getElementById('btn-back-cards').addEventListener('click', () => {
+            switchView('view-study');
+        });
+
+        function showCompletion() {
+            switchView('view-complete');
+            const reviewMissedBtn = document.getElementById('btn-review-missed');
+            if (state.missedCards.length > 0) {
+                reviewMissedBtn.classList.remove('hidden');
+                reviewMissedBtn.innerText = `Review Missed (${state.missedCards.length})`;
             } else {
-                weakBtn.classList.add('hidden');
+                reviewMissedBtn.classList.add('hidden');
             }
 
-            // Fun Confetti
             confetti({
                 particleCount: 150,
-                spread: 70,
+                spread: 80,
                 origin: { y: 0.6 },
-                colors: ['#a78bfa', '#f472b6', '#fbbf24', '#34d399']
+                colors: ['#818cf8', '#c084fc', '#34d399', '#f87171']
             });
         }
 
-        document.getElementById('btn-review-weak').addEventListener('click', () => startStudySession('weak'));
-        document.getElementById('btn-start-test').addEventListener('click', () => startTest('all'));
-        document.getElementById('btn-restart').addEventListener('click', () => startStudySession('all'));
+        document.getElementById('btn-review-missed').addEventListener('click', startMissedReview);
+        document.getElementById('btn-restart-all').addEventListener('click', resetToFirstQuestion);
 
-
-        const testCard = document.getElementById('test-card');
-        const testQText = document.getElementById('test-q-text');
-        const testAText = document.getElementById('test-a-text');
-        const btnTestShow = document.getElementById('btn-test-show');
-        const testRatingBtns = document.getElementById('test-rating-btns');
-        const testProgressText = document.getElementById('test-progress-text');
-
-        function startTest(mode = 'all') {
-            if (mode === 'all') {
-                state.testQueue = ALL_QUESTIONS.map(q => q.id);
-            } else if (mode === 'mistakes') {
-                state.testQueue = [...state.testMistakes];
-            }
-            
-            state.testMistakes = [];
-            state.testIndex = 0;
-            state.testCorrect = 0;
-            saveState();
-            
-            switchView('view-test');
-            renderTestCard();
-        }
-
-        function renderTestCard() {
-            if (state.testIndex >= state.testQueue.length) {
-                showTestResults();
-                return;
-            }
-
-            testProgressText.innerText = `Question ${state.testIndex + 1} of ${state.testQueue.length}`;
-            
-            testCard.classList.remove('flipped');
-            btnTestShow.classList.remove('hidden');
-            testRatingBtns.classList.add('hidden');
-            testRatingBtns.classList.remove('flex');
-
-            const currentId = state.testQueue[state.testIndex];
-            const qObj = ALL_QUESTIONS.find(q => q.id === currentId);
-            testQText.innerText = qObj.q;
-            testAText.innerText = qObj.a;
-        }
-
-        btnTestShow.addEventListener('click', () => {
-            testCard.classList.add('flipped');
-            btnTestShow.classList.add('hidden');
-            testRatingBtns.classList.remove('hidden');
-            testRatingBtns.classList.add('flex');
-        });
-
-        testCard.addEventListener('click', () => {
-            if (!testCard.classList.contains('flipped')) btnTestShow.click();
-        });
-
-        function handleTestRating(correct) {
-            const currentId = state.testQueue[state.testIndex];
-            if (correct) {
-                state.testCorrect++;
-            } else {
-                state.testMistakes.push(currentId);
-            }
-            
-            state.testIndex++;
-            saveState();
-            
-            setTimeout(() => {
-                renderTestCard();
-            }, 150);
-        }
-
-        document.getElementById('btn-test-right').addEventListener('click', (e) => { e.stopPropagation(); handleTestRating(true); });
-        document.getElementById('btn-test-wrong').addEventListener('click', (e) => { e.stopPropagation(); handleTestRating(false); });
-
-
-        function showTestResults() {
-            switchView('view-results');
-            
-            document.getElementById('res-total').innerText = state.testQueue.length;
-            document.getElementById('res-right').innerText = state.testCorrect;
-            document.getElementById('res-wrong').innerText = state.testMistakes.length;
-
-            const reviewBtn = document.getElementById('btn-review-mistakes');
-            if (state.testMistakes.length > 0) {
-                reviewBtn.classList.remove('hidden');
-            } else {
-                reviewBtn.classList.add('hidden');
-                // Confetti if perfect score!
-                confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
-            }
-        }
-
-        document.getElementById('btn-review-mistakes').addEventListener('click', () => startTest('mistakes'));
-        document.getElementById('btn-home').addEventListener('click', () => startStudySession('all'));
-
-        window.onload = () => {
-            if (loadState() && state.activeQueue.length > 0) {
-                // Resume active study session
-                switchView('view-study');
-                renderStudyCard();
-            } else {
-                // Start fresh
-                startStudySession('all');
-            }
-        };
-
+        window.onload = resetToFirstQuestion;
     </script>
 </body>
 </html>
