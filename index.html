@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kids Computer Flashcards</title>
+    
+    <!-- Playful Google Font: Quicksand -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS for rapid styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Confetti for the completion screen -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            /* Pastel Theme Variables */
+            --bg-gradient: linear-gradient(135deg, #fdf4ff 0%, #e0e7ff 100%);
+            --card-border: #c7d2fe;
+            --btn-blue: #a78bfa;
+            --btn-blue-shadow: #8b5cf6;
+            --btn-green: #34d399;
+            --btn-green-shadow: #10b981;
+            --btn-yellow: #fbbf24;
+            --btn-yellow-shadow: #d97706;
+            --btn-red: #f472b6;
+            --btn-red-shadow: #db2777;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: var(--bg-gradient);
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Fallback */
+            height: 100dvh; /* Mobile browser friendly */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+            -webkit-user-select: none;
+            color: #475569;
+        }
+
+        /* Fun, chunky buttons for kids */
+        .btn-chunky {
+            position: relative;
+            border-radius: 1.5rem;
+            border: none;
+            color: white;
+            font-weight: 700;
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .btn-chunky:active {
+            transform: translateY(6px);
+            box-shadow: none !important;
+        }
+
+        .btn-primary { background-color: var(--btn-blue); box-shadow: 0 8px 0 0 var(--btn-blue-shadow); border: 2px solid var(--btn-blue-shadow); }
+        .btn-success { background-color: var(--btn-green); box-shadow: 0 8px 0 0 var(--btn-green-shadow); border: 2px solid var(--btn-green-shadow); }
+        .btn-warning { background-color: var(--btn-yellow); box-shadow: 0 8px 0 0 var(--btn-yellow-shadow); border: 2px solid var(--btn-yellow-shadow); }
+        .btn-danger { background-color: var(--btn-red); box-shadow: 0 8px 0 0 var(--btn-red-shadow); border: 2px solid var(--btn-red-shadow); }
+
+        /* Card flip mechanics */
+        .card-container {
+            perspective: 1500px;
+            flex-grow: 1;
+            margin: 1rem;
+            position: relative;
+        }
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy flip */
+            transform-style: preserve-3d;
+        }
+        .flipped .card-inner { transform: rotateY(180deg); }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 2rem;
+            background-color: white;
+            border: 4px solid var(--card-border);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        .card-back { transform: rotateY(180deg); border-color: #fbcfe8; }
+
+        /* Cute Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+
+        /* Thick Progress Bar */
+        .progress-track {
+            background-color: #e2e8f0;
+            border-radius: 9999px;
+            height: 28px;
+            width: 100%;
+            border: 3px solid white;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #f472b6, #a78bfa);
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.4s ease-out;
+        }
+
+        /* View toggling */
+        .view { display: none; flex-direction: column; height: 100%; width: 100%; max-width: 600px; margin: 0 auto; }
+        .view.active { display: flex; }
+        
+        .floating { animation: float 3s ease-in-out infinite; }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="view-study" class="view active relative p-4">
+        <!-- Header / Progress -->
+        <div class="flex-none pt-2 pb-4 text-center">
+            <h1 class="text-2xl font-bold text-indigo-500 mb-2">🌸 Study Time!</h1>
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">🦄</span>
+                <div class="progress-track flex-grow">
+                    <div id="study-progress-fill" class="progress-fill" style="width: 0%;"></div>
+                </div>
+                <span id="study-progress-text" class="text-xl font-bold text-slate-600 w-16 text-right">0/80</span>
+            </div>
+        </div>
+
+        <!-- Flashcard -->
+        <div id="study-card" class="card-container cursor-pointer w-full">
+            <div class="card-inner">
+                <!-- Front -->
+                <div class="card-face flex flex-col justify-center items-center text-center">
+                    <span class="text-sm font-bold text-indigo-400 uppercase tracking-wider mb-4 bg-indigo-50 px-4 py-1 rounded-full">Question</span>
+                    <p id="study-q-text" class="text-2xl font-bold text-slate-700 leading-snug my-auto px-2">Loading...</p>
+                    <div class="mt-4 text-indigo-300 floating text-sm font-bold">Tap card to flip! ✨</div>
+                </div>
+                <!-- Back -->
+                <div class="card-face card-back flex flex-col justify-center items-center text-center">
+                    <span class="text-sm font-bold text-pink-400 uppercase tracking-wider mb-4 bg-pink-50 px-4 py-1 rounded-full">Answer</span>
+                    <p id="study-a-text" class="text-2xl font-bold text-slate-700 leading-snug my-auto px-2">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex-none pt-6 pb-2 h-32 flex flex-col justify-end">
+            <!-- Show Answer Button -->
+            <button id="btn-show-answer" class="btn-chunky btn-primary w-full py-4 text-2xl">
+                👁️ Show Answer
+            </button>
+            
+            <!-- Rating Buttons -->
+            <div id="study-rating-btns" class="hidden flex-row gap-3 w-full h-full items-end">
+                <button id="btn-again" class="btn-chunky btn-danger flex-1 py-3 flex-col text-lg leading-tight">
+                    <span class="text-3xl">🔄</span><span>Again</span>
+                </button>
+                <button id="btn-hard" class="btn-chunky btn-warning flex-1 py-3 flex-col text-lg leading-tight">
+                    <span class="text-3xl">🤔</span><span>Hard</span>
+                </button>
+                <button id="btn-got-it" class="btn-chunky btn-success flex-1 py-3 flex-col text-lg leading-tight">
+                    <span class="text-3xl">⭐</span><span>Got It!</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-complete" class="view items-center justify-center p-6 text-center">
+        <div class="floating mb-6 text-8xl">🎉</div>
+        <h1 class="text-4xl font-bold text-indigo-500 mb-2">Awesome Job!</h1>
+        <p class="text-xl text-slate-600 font-bold mb-8">All cards completed!</p>
+        
+        <div class="flex flex-col gap-4 w-full px-2">
+            <button id="btn-review-weak" class="btn-chunky btn-warning w-full py-4 text-xl hidden">
+                🩹 Review Weak Cards
+            </button>
+            <button id="btn-start-test" class="btn-chunky btn-primary w-full py-4 text-xl">
+                📝 Start Final Test
+            </button>
+            <button id="btn-restart" class="btn-chunky btn-danger w-full py-4 text-xl">
+                🔄 Study All Again
+            </button>
+        </div>
+    </div>
+
+    <div id="view-test" class="view relative p-4">
+        <div class="flex-none pt-2 pb-4 text-center">
+            <h1 class="text-2xl font-bold text-pink-500 mb-2">📝 Final Test Mode</h1>
+            <p id="test-progress-text" class="text-lg font-bold text-slate-500">Question 1 of 80</p>
+        </div>
+
+        <div id="test-card" class="card-container w-full">
+            <div class="card-inner">
+                <div class="card-face flex flex-col justify-center items-center text-center">
+                    <p id="test-q-text" class="text-2xl font-bold text-slate-700 leading-snug my-auto px-2"></p>
+                </div>
+                <div class="card-face card-back flex flex-col justify-center items-center text-center">
+                    <p id="test-a-text" class="text-2xl font-bold text-slate-700 leading-snug my-auto px-2"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-none pt-6 pb-2 h-32 flex flex-col justify-end">
+            <button id="btn-test-show" class="btn-chunky btn-primary w-full py-4 text-2xl">
+                👁️ Reveal Answer
+            </button>
+            <div id="test-rating-btns" class="hidden flex-row gap-4 w-full h-full items-end">
+                <button id="btn-test-wrong" class="btn-chunky btn-danger flex-1 py-4 text-xl flex-col">
+                    <span class="text-3xl mb-1">❌</span><span>Oops</span>
+                </button>
+                <button id="btn-test-right" class="btn-chunky btn-success flex-1 py-4 text-xl flex-col">
+                    <span class="text-3xl mb-1">✅</span><span>Knew It!</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-results" class="view items-center justify-center p-6 text-center">
+        <div class="floating mb-4 text-8xl">🏆</div>
+        <h1 class="text-4xl font-bold text-indigo-500 mb-6">Test Results</h1>
+        
+        <div class="bg-white rounded-3xl p-6 w-full border-4 border-indigo-100 shadow-lg mb-8 text-xl font-bold">
+            <div class="flex justify-between text-indigo-500 mb-3"><span>Questions:</span> <span id="res-total">0</span></div>
+            <div class="flex justify-between text-emerald-500 mb-3"><span>Correct:</span> <span id="res-right">0</span></div>
+            <div class="flex justify-between text-pink-500"><span>Missed:</span> <span id="res-wrong">0</span></div>
+        </div>
+
+        <div class="flex flex-col gap-4 w-full">
+            <button id="btn-review-mistakes" class="btn-chunky btn-warning w-full py-4 text-xl hidden">
+                🔍 Review Mistakes
+            </button>
+            <button id="btn-home" class="btn-chunky btn-primary w-full py-4 text-xl">
+                🏠 Back to Start
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const ALL_QUESTIONS = [
+            { id: 1, q: "1. What are the two basic components of a computer system?", a: "The two basic components of a computer system are hardware and software." },
+            { id: 2, q: "2. What is computer hardware?", a: "Computer hardware consists of the physical components that make up a computer system." },
+            { id: 3, q: "3. Why is hardware described as the physical component of a computer system?", a: "Hardware is described as physical because it consists of components that can be seen, touched and felt." },
+            { id: 4, q: "4. Give four examples of computer hardware mentioned in the chapter.", a: "Examples include the keyboard, mouse and monitor. The chapter uses these as examples of hardware." },
+            { id: 5, q: "5. What is computer software?", a: "Software is a computer program written to carry out a particular task on the computer." },
+            { id: 6, q: "6. Why can software not be seen or touched in the same manner as hardware?", a: "Software consists of programs and instructions rather than physical components, so it cannot be physically seen, touched or felt like hardware." },
+            { id: 7, q: "7. What is the principal function of software in a computer system?", a: "Software provides instructions to the computer for carrying out particular tasks." },
+            { id: 8, q: "8. Give three examples of computer software mentioned in the chapter.", a: "Examples given are MS Paint, MS Windows and Logo." },
+            { id: 9, q: "9. Explain the relationship between hardware and software using the television analogy given in the chapter.", a: "Hardware can be compared to a television, while software can be compared to the program being viewed on the television." },
+            { id: 10, q: "10. Why is hardware of no use if there is no software operating it?", a: "Hardware requires software to provide the instructions necessary for carrying out tasks; therefore, hardware cannot perform useful operations without software." },
+            { id: 11, q: "11. What are the two main types of computer software?", a: "The two main types are System software and Application software." },
+            { id: 12, q: "12. What is system software?", a: "System software is software that controls the operation of a computer." },
+            { id: 13, q: "13. What role does system software play in the operation of a computer?", a: "System software controls the operation of the computer and helps in the running of other software." },
+            { id: 14, q: "14. How does system software assist in the running of other software?", a: "It provides the basic environment and functions required for other software to operate on the computer." },
+            { id: 15, q: "15. What hardware resources does system software monitor according to the chapter?", a: "It monitors hardware such as the memory and CPU." },
+            { id: 16, q: "16. Which three categories of programs are included under system software?", a: "System software includes the operating system, language processors and utility programs." },
+            { id: 17, q: "17. Of the components of system software, which one is described as the most important?", a: "The operating system is described as the most important system software." },
+            { id: 18, q: "18. What is the role of a system's programmer?", a: "The person who develops software for the system is referred to as a system's programmer." },
+            { id: 19, q: "19. What is an operating system?", a: "An operating system is the basic software present in a computer that enables the user to work with the hardware." },
+            { id: 20, q: "20. Why is the operating system described as the basic software present in a computer?", a: "It provides the fundamental functions required for the user to work with the computer hardware and for other programs to operate." },
+            { id: 21, q: "21. How does an operating system enable a user to work with computer hardware?", a: "It communicates with the hardware, thereby allowing the user and other programs to interact with the computer's hardware." },
+            { id: 22, q: "22. What does an operating system do in relation to the hardware?", a: "An operating system communicates with and manages the hardware of the computer." },
+            { id: 23, q: "23. What does an operating system do in relation to other programs?", a: "It monitors other programs running on the computer." },
+            { id: 24, q: "24. How does an operating system help users manage files and folders?", a: "It helps users manage files and folders used to store information on the computer." },
+            { id: 25, q: "25. Where is information stored according to the explanation of the operating system?", a: "Information is stored in files and folders on the computer." },
+            { id: 26, q: "26. Name the three operating systems given as examples in the chapter.", a: "The examples are Windows, Mac OS X and Linux." },
+            { id: 27, q: "27. What is a language processor, also called a translator?", a: "A language processor or translator is software that converts a program written in a computer language into machine language that the computer can understand." },
+            { id: 28, q: "28. Why is a language processor necessary when programs are written in computer languages such as Java, C and C++?", a: "A computer cannot directly understand these computer languages because it understands binary or machine language. The language processor converts the program into a form the computer can understand." },
+            { id: 29, q: "29. Name three computer languages mentioned in the chapter.", a: "The chapter mentions Java, C and C++." },
+            { id: 30, q: "30. Why cannot a computer directly understand most computer programming languages?", a: "A computer understands only binary or machine language, which consists of 0s and 1s." },
+            { id: 31, q: "31. What is meant by binary or machine language?", a: "Binary or machine language is the language understood by a computer and consists of 0s and 1s." },
+            { id: 32, q: "32. Which two digits constitute the binary or machine language referred to in the chapter?", a: "The two digits are 0 and 1." },
+            { id: 33, q: "33. What is the principal function of a language processor?", a: "Its principal function is to convert computer language into machine language that a computer can understand." },
+            { id: 34, q: "34. What are utility programs?", a: "Utility programs are programs that help the computer perform better and play an important role in the regular upkeep and maintenance of the computer." },
+            { id: 35, q: "35. How do utility programs contribute to the performance of a computer?", a: "They help the computer perform better by carrying out various maintenance and management tasks." },
+            { id: 36, q: "36. What role do utility programs play in the regular upkeep and maintenance of a computer?", a: "They perform tasks concerned with the upkeep, maintenance and proper functioning of the computer." },
+            { id: 37, q: "37. Where are utility programs often built in?", a: "Utility programs are often built into the operating system." },
+            { id: 38, q: "38. What is Win Zip, according to the chapter?", a: "Win Zip is given as an example of a utility program." },
+            { id: 39, q: "39. What does Win Zip do with files?", a: "Win Zip compresses files." },
+            { id: 40, q: "40. Name four tasks for which utility programs are used according to the chapter.", a: "Utility programs are used for tasks such as file repair, backing up data, dealing with virus attacks and disk defragmentation." },
+            { id: 41, q: "41. What is application software?", a: "Application software is software written to do a particular task on the computer." },
+            { id: 42, q: "42. How does application software differ in purpose from system software?", a: "System software controls the operation of the computer and supports other software, whereas application software is designed to enable the user to perform a specific task." },
+            { id: 43, q: "43. Why is application software installed additionally on a computer?", a: "Application software is installed according to the exact requirements of the user, since different users require software for different tasks." },
+            { id: 44, q: "44. Name four examples of application software given in the chapter.", a: "Examples include school management software, movie ticket booking software, result processing software and word-processing software." },
+            { id: 45, q: "45. What are the two types of application software?", a: "The two types are General-Purpose application software and Tailor-Made application software." },
+            { id: 46, q: "46. What is general-purpose application software?", a: "General-purpose application software is software designed to satisfy the common needs of people." },
+            { id: 47, q: "47. Why is general-purpose software commonly purchased “off-the-shelf”?", a: "Most computer users purchase general-purpose software already developed and readily available in the market, since it is designed to satisfy common requirements." },
+            { id: 48, q: "48. Using the example given in the chapter, why would a person purchase MS Paint rather than employ a programmer to develop drawing software?", a: "A person who needs software for drawing and painting can purchase MS Paint, which already performs the required function, rather than employing a programmer to develop a separate program." },
+            { id: 49, q: "49. State four reasons given in the chapter for using general-purpose software.", a: "General-purpose software is: Relatively cheap. Readily available and can be installed quickly and easily. Usually thoroughly tested, so there is very little chance of errors. Well supported through books, online help and Internet discussions." },
+            { id: 50, q: "50. What limitation does a customer face when purchasing general-purpose software with respect to making special changes to it?", a: "When customers purchase general-purpose software, they cannot ask for special changes to be made specifically for them." },
+            { id: 51, q: "51. What are database packages used for?", a: "They are used to store and retrieve information." },
+            { id: 52, q: "52. Name the database software given in the chapter.", a: "MS Access, Lotus Approach, Paradox, Oracle and Visual FoxPro." },
+            { id: 53, q: "53. What are spreadsheet packages used for?", a: "They perform tasks involving calculations and the creation of graphs and charts based on data." },
+            { id: 54, q: "54. Name the spreadsheet software given in the chapter.", a: "MS Excel and Lotus 123." },
+            { id: 55, q: "55. What are word-processing packages used for?", a: "They create text-based documents such as letters, reports and memos." },
+            { id: 56, q: "56. Name the word-processing software given.", a: "MS Word and Word Perfect." },
+            { id: 57, q: "57. What are Desktop Publishing (DTP) packages used for?", a: "They produce professional-quality publications, such as posters, books, newsletters, newspapers and magazines." },
+            { id: 58, q: "58. Name the DTP software given in the chapter.", a: "MS Publisher, PageMaker, Page Plus and Adobe InDesign." },
+            { id: 59, q: "59. What are graphics packages used for?", a: "They help perform tasks involving artwork, such as modifying pictures." },
+            { id: 60, q: "60. Name the graphics software given.", a: "Paint, Paint Brush, Serif Draw and Corel Draw." },
+            { id: 61, q: "61. What are presentation graphics packages used for?", a: "They are used to create slideshows and presentations." },
+            { id: 62, q: "62. Name the presentation graphics software given.", a: "PowerPoint, Lotus Freelance and Photoshop." },
+            { id: 63, q: "63. What are Computer-Aided Design (CAD) packages used for?", a: "They help perform tasks involving engineering designs and architectural plans, such as designing a building layout or an automobile." },
+            { id: 64, q: "64. Name the CAD software given in the chapter.", a: "2D-Design, AutoCAD and Turbo CAD." },
+            { id: 65, q: "65. What is tailor-made software?", a: "Tailor-made software is software made according to the specific requirements of a customer." },
+            { id: 66, q: "66. When might an organization decide to have tailor-made software developed?", a: "An organization may choose tailor-made software when the general-purpose software readily available in the market cannot perform exactly what the organization requires." },
+            { id: 67, q: "67. Give the example of tailor-made software provided in the chapter.", a: "A school may have result-processing software developed especially for it by a programmer." },
+            { id: 68, q: "68. Why is tailor-made software also called customized software?", a: "It is called customized software because it is made according to the specific requirements of the customer." },
+            { id: 69, q: "69. What is the fundamental difference between general-purpose and tailor-made software?", a: "General-purpose software is designed to satisfy common needs, whereas tailor-made software is created to satisfy the specific needs of a particular customer or organization." },
+            { id: 70, q: "70. What are the main drawbacks of tailor-made software?", a: "The main drawbacks are the high cost involved and the long development time that such programs may require." },
+            { id: 71, q: "71. Why can tailor-made software be expensive?", a: "It is developed specifically according to the requirements of a particular customer, which involves custom development and therefore higher cost." },
+            { id: 72, q: "72. Why can tailor-made software take a long time to develop?", a: "Since it must be developed according to the specific requirements of the customer, its development may require considerable time." },
+            { id: 73, q: "73. What examples of tailor-made software are mentioned in the “Let’s Recall” section?", a: "The examples given are payroll software and railway reservation software." },
+            { id: 74, q: "74. According to the “Let’s Recall” section, what is software?", a: "Software is a set of programs designed to perform a well-defined task." },
+            { id: 75, q: "75. According to the “Let’s Recall” section, what is a program?", a: "A program is a sequence of instructions written to solve a particular problem." },
+            { id: 76, q: "76. What does system software include according to the “Let’s Recall” section?", a: "System software includes the operating system, language processors and utility programs, which enable a computer system to operate." },
+            { id: 77, q: "77. What tasks do utilities perform according to the “Let’s Recall” section?", a: "Utilities perform tasks related to the management of computer functions, such as disk repair and data backup." },
+            { id: 78, q: "78. What is the purpose of application software according to the “Let’s Recall” section?", a: "Application software is designed to perform a particular task." },
+            { id: 79, q: "79. What is general-purpose application software designed to do?", a: "It is designed to satisfy the common needs of a person or an organization." },
+            { id: 80, q: "80. What is tailor-made application software designed to do?", a: "It is created to satisfy the specific needs of a person or an organization." }
+        ];
+
+        let state = {
+            activeQueue: [],
+            weakCards: [],
+            totalCardsInSession: 0,
+            completedCount: 0,
+            
+            // Test Mode State
+            testQueue: [],
+            testMistakes: [],
+            testIndex: 0,
+            testCorrect: 0
+        };
+
+        const STORAGE_KEY = 'kids_flashcard_state_v1';
+
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    // Minimal validation to ensure format is right
+                    if (parsed && Array.isArray(parsed.activeQueue)) {
+                        state = parsed;
+                        return true;
+                    }
+                } catch(e) {}
+            }
+            return false;
+        }
+
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        const studyCard = document.getElementById('study-card');
+        const studyQText = document.getElementById('study-q-text');
+        const studyAText = document.getElementById('study-a-text');
+        
+        const btnShowAnswer = document.getElementById('btn-show-answer');
+        const ratingBtns = document.getElementById('study-rating-btns');
+        const progressBar = document.getElementById('study-progress-fill');
+        const progressText = document.getElementById('study-progress-text');
+
+        function startStudySession(mode = 'all') {
+            if (mode === 'all') {
+                // Fill queue with all IDs
+                state.activeQueue = ALL_QUESTIONS.map(q => q.id);
+            } else if (mode === 'weak') {
+                // Fill queue with weak cards
+                state.activeQueue = [...new Set(state.weakCards)]; // remove duplicates
+            }
+            
+            state.weakCards = [];
+            state.totalCardsInSession = state.activeQueue.length;
+            state.completedCount = 0;
+            saveState();
+            
+            switchView('view-study');
+            renderStudyCard();
+        }
+
+        function renderStudyCard() {
+            // Check for completion
+            if (state.activeQueue.length === 0) {
+                showCompletionScreen();
+                return;
+            }
+
+            // Update Progress
+            const pct = (state.completedCount / state.totalCardsInSession) * 100;
+            progressBar.style.width = `${pct}%`;
+            progressText.innerText = `${state.completedCount}/${state.totalCardsInSession}`;
+
+            // Reset Card UI
+            studyCard.classList.remove('flipped');
+            btnShowAnswer.classList.remove('hidden');
+            ratingBtns.classList.add('hidden');
+            ratingBtns.classList.remove('flex');
+
+            // Load Content
+            const currentId = state.activeQueue[0];
+            const qObj = ALL_QUESTIONS.find(q => q.id === currentId);
+            studyQText.innerText = qObj.q;
+            studyAText.innerText = qObj.a;
+        }
+
+        btnShowAnswer.addEventListener('click', () => {
+            studyCard.classList.add('flipped');
+            btnShowAnswer.classList.add('hidden');
+            ratingBtns.classList.remove('hidden');
+            ratingBtns.classList.add('flex');
+        });
+
+        // Allow tapping the card to flip it too
+        studyCard.addEventListener('click', () => {
+            if (!studyCard.classList.contains('flipped')) {
+                btnShowAnswer.click();
+            }
+        });
+
+        function handleRating(rating) {
+            const currentId = state.activeQueue.shift(); // Remove from front
+
+            if (rating === 'again') {
+                // Insert 2-3 cards away, or at end if queue is small
+                const insertPos = Math.min(2 + Math.floor(Math.random() * 2), state.activeQueue.length);
+                state.activeQueue.splice(insertPos, 0, currentId);
+                state.weakCards.push(currentId);
+            } else if (rating === 'hard') {
+                // Insert further back (e.g., 5-8 cards away)
+                const insertPos = Math.min(5 + Math.floor(Math.random() * 4), state.activeQueue.length);
+                state.activeQueue.splice(insertPos, 0, currentId);
+                state.weakCards.push(currentId);
+            } else if (rating === 'gotit') {
+                // Gone from queue!
+                state.completedCount++;
+            }
+
+            saveState();
+            
+            // Brief timeout for visual feedback before loading next card
+            setTimeout(() => {
+                renderStudyCard();
+            }, 150);
+        }
+
+        document.getElementById('btn-again').addEventListener('click', (e) => { e.stopPropagation(); handleRating('again'); });
+        document.getElementById('btn-hard').addEventListener('click', (e) => { e.stopPropagation(); handleRating('hard'); });
+        document.getElementById('btn-got-it').addEventListener('click', (e) => { e.stopPropagation(); handleRating('gotit'); });
+
+
+        function showCompletionScreen() {
+            switchView('view-complete');
+            
+            // Show weak cards button only if there are weak cards
+            const weakBtn = document.getElementById('btn-review-weak');
+            if (state.weakCards.length > 0) {
+                weakBtn.classList.remove('hidden');
+            } else {
+                weakBtn.classList.add('hidden');
+            }
+
+            // Fun Confetti
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#a78bfa', '#f472b6', '#fbbf24', '#34d399']
+            });
+        }
+
+        document.getElementById('btn-review-weak').addEventListener('click', () => startStudySession('weak'));
+        document.getElementById('btn-start-test').addEventListener('click', () => startTest('all'));
+        document.getElementById('btn-restart').addEventListener('click', () => startStudySession('all'));
+
+
+        const testCard = document.getElementById('test-card');
+        const testQText = document.getElementById('test-q-text');
+        const testAText = document.getElementById('test-a-text');
+        const btnTestShow = document.getElementById('btn-test-show');
+        const testRatingBtns = document.getElementById('test-rating-btns');
+        const testProgressText = document.getElementById('test-progress-text');
+
+        function startTest(mode = 'all') {
+            if (mode === 'all') {
+                state.testQueue = ALL_QUESTIONS.map(q => q.id);
+            } else if (mode === 'mistakes') {
+                state.testQueue = [...state.testMistakes];
+            }
+            
+            state.testMistakes = [];
+            state.testIndex = 0;
+            state.testCorrect = 0;
+            saveState();
+            
+            switchView('view-test');
+            renderTestCard();
+        }
+
+        function renderTestCard() {
+            if (state.testIndex >= state.testQueue.length) {
+                showTestResults();
+                return;
+            }
+
+            testProgressText.innerText = `Question ${state.testIndex + 1} of ${state.testQueue.length}`;
+            
+            testCard.classList.remove('flipped');
+            btnTestShow.classList.remove('hidden');
+            testRatingBtns.classList.add('hidden');
+            testRatingBtns.classList.remove('flex');
+
+            const currentId = state.testQueue[state.testIndex];
+            const qObj = ALL_QUESTIONS.find(q => q.id === currentId);
+            testQText.innerText = qObj.q;
+            testAText.innerText = qObj.a;
+        }
+
+        btnTestShow.addEventListener('click', () => {
+            testCard.classList.add('flipped');
+            btnTestShow.classList.add('hidden');
+            testRatingBtns.classList.remove('hidden');
+            testRatingBtns.classList.add('flex');
+        });
+
+        testCard.addEventListener('click', () => {
+            if (!testCard.classList.contains('flipped')) btnTestShow.click();
+        });
+
+        function handleTestRating(correct) {
+            const currentId = state.testQueue[state.testIndex];
+            if (correct) {
+                state.testCorrect++;
+            } else {
+                state.testMistakes.push(currentId);
+            }
+            
+            state.testIndex++;
+            saveState();
+            
+            setTimeout(() => {
+                renderTestCard();
+            }, 150);
+        }
+
+        document.getElementById('btn-test-right').addEventListener('click', (e) => { e.stopPropagation(); handleTestRating(true); });
+        document.getElementById('btn-test-wrong').addEventListener('click', (e) => { e.stopPropagation(); handleTestRating(false); });
+
+
+        function showTestResults() {
+            switchView('view-results');
+            
+            document.getElementById('res-total').innerText = state.testQueue.length;
+            document.getElementById('res-right').innerText = state.testCorrect;
+            document.getElementById('res-wrong').innerText = state.testMistakes.length;
+
+            const reviewBtn = document.getElementById('btn-review-mistakes');
+            if (state.testMistakes.length > 0) {
+                reviewBtn.classList.remove('hidden');
+            } else {
+                reviewBtn.classList.add('hidden');
+                // Confetti if perfect score!
+                confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
+            }
+        }
+
+        document.getElementById('btn-review-mistakes').addEventListener('click', () => startTest('mistakes'));
+        document.getElementById('btn-home').addEventListener('click', () => startStudySession('all'));
+
+        window.onload = () => {
+            if (loadState() && state.activeQueue.length > 0) {
+                // Resume active study session
+                switchView('view-study');
+                renderStudyCard();
+            } else {
+                // Start fresh
+                startStudySession('all');
+            }
+        };
+
+    </script>
+</body>
+</html>
