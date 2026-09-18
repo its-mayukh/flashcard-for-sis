@@ -11,7 +11,7 @@
 
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #f0f4ff 0%, #eef2ff 100%);
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
         }
 
         body {
@@ -104,9 +104,9 @@
             box-shadow: 0 12px 35px -12px rgba(99, 102, 241, 0.15);
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Centers content vertically */
-            align-items: center;     /* Centers content horizontally */
-            text-align: center;      /* Centers text */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
             padding: 2.5rem;
             box-sizing: border-box;
         }
@@ -147,16 +147,87 @@
 
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+
+        /* Ensure procedures format well */
+        .pre-wrap { white-space: pre-wrap; }
     </style>
 </head>
 <body>
 
+    <!-- HOME VIEW (CHAPTER SELECTION) -->
+    <div id="view-home" class="view active px-5 py-8 bg-[#f8fafc]">
+        <div class="flex flex-col items-center mb-10 mt-6">
+            <!-- Decorative Header Icon -->
+            <div class="flex items-center gap-3 mb-5">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transform -rotate-12"><line x1="12" y1="2" x2="12" y2="8"></line><line x1="6" y1="6" x2="10" y2="10"></line><line x1="18" y1="6" x2="14" y2="10"></line></svg>
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transform rotate-12"><line x1="12" y1="2" x2="12" y2="8"></line><line x1="6" y1="6" x2="10" y2="10"></line><line x1="18" y1="6" x2="14" y2="10"></line></svg>
+            </div>
+            <h1 class="text-[28px] font-extrabold text-[#1e293b] tracking-tight mb-1">Study Flashcards</h1>
+            <p class="text-[15px] font-bold text-slate-400">Choose a chapter to start</p>
+        </div>
+
+        <div class="flex flex-col gap-4 w-full max-w-[340px] mx-auto">
+            
+            <!-- Chapter 2 Card -->
+            <button class="bg-white rounded-[20px] p-4 flex items-center shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] border-2 border-slate-50 active:scale-95 transition" onclick="startChapter('ch2')">
+                <div class="w-[52px] h-[52px] rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center shrink-0">
+                    <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>
+                </div>
+                <div class="ml-4 text-left flex-1">
+                    <p class="text-[11px] font-bold text-slate-400 tracking-widest uppercase mb-0.5">Chapter 2</p>
+                    <h3 class="text-[16px] font-bold text-[#1e293b] leading-tight">Computer Software</h3>
+                    <p class="text-[13px] font-semibold text-slate-400 mt-1">80 questions</p>
+                </div>
+                <div class="text-slate-300 ml-2">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+            </button>
+
+            <!-- Chapter 3 Card -->
+            <button class="bg-white rounded-[20px] p-4 flex items-center shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] border-2 border-slate-50 active:scale-95 transition" onclick="startChapter('ch3')">
+                <div class="w-[52px] h-[52px] rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center shrink-0">
+                    <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                </div>
+                <div class="ml-4 text-left flex-1">
+                    <p class="text-[11px] font-bold text-slate-400 tracking-widest uppercase mb-0.5">Chapter 3</p>
+                    <h3 class="text-[16px] font-bold text-[#1e293b] leading-tight">Advance Formatting Features in MS Word</h3>
+                    <p class="text-[13px] font-semibold text-slate-400 mt-1">45 questions</p>
+                </div>
+                <div class="text-slate-300 ml-2">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+            </button>
+
+            <!-- Chapter 4 Card -->
+            <button class="bg-white rounded-[20px] p-4 flex items-center shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] border-2 border-slate-50 active:scale-95 transition" onclick="startChapter('ch4')">
+                <div class="w-[52px] h-[52px] rounded-2xl bg-purple-50 text-purple-500 flex items-center justify-center shrink-0">
+                    <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                </div>
+                <div class="ml-4 text-left flex-1">
+                    <p class="text-[11px] font-bold text-slate-400 tracking-widest uppercase mb-0.5">Chapter 4</p>
+                    <h3 class="text-[16px] font-bold text-[#1e293b] leading-tight">MS Word 2013 Insert Tab</h3>
+                    <p class="text-[13px] font-semibold text-slate-400 mt-1">50 questions</p>
+                </div>
+                <div class="text-slate-300 ml-2">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+            </button>
+        </div>
+    </div>
+
     <!-- STUDY FLASHCARD VIEW -->
-    <div id="view-study" class="view active px-5 py-5 justify-between relative">
+    <div id="view-study" class="view px-5 py-5 justify-between relative bg-[#f0f4ff]">
         
+        <!-- Subtle Back to Home Button -->
+        <button onclick="goHome()" class="absolute top-4 left-5 text-indigo-500 font-bold text-[13px] tracking-wide active:scale-95 transition flex items-center gap-1 z-20">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            HOME
+        </button>
+
         <!-- Header: Reset & Progress Bar Combined -->
-        <div class="flex items-center gap-4 w-full mb-8 mt-2 max-w-sm mx-auto">
-            <button id="btn-reset" class="w-10 h-10 rounded-full bg-white text-slate-500 shadow-sm border-2 border-slate-100 flex items-center justify-center active:scale-90 transition" aria-label="Reset">
+        <div class="flex items-center gap-4 w-full mb-8 mt-10 max-w-sm mx-auto z-10">
+            <button id="btn-reset" class="w-10 h-10 rounded-full bg-white text-slate-500 shadow-sm border-2 border-slate-100 flex items-center justify-center active:scale-90 transition shrink-0" aria-label="Reset">
                 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
             </button>
             <div class="progress-track h-8">
@@ -177,14 +248,14 @@
                         <div class="card-face">
                             <span class="absolute top-6 text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Question</span>
                             <div class="overflow-y-auto w-full max-h-full py-6 flex items-center justify-center">
-                                <p id="study-q-text" class="text-2xl font-bold text-slate-800 leading-snug">Loading...</p>
+                                <p id="study-q-text" class="text-2xl font-bold text-slate-800 leading-snug pre-wrap">Loading...</p>
                             </div>
                         </div>
                         <!-- Back (Answer) -->
                         <div class="card-face card-back">
                             <span class="absolute top-6 text-xs font-bold text-indigo-400 uppercase tracking-[0.2em]">Answer</span>
                             <div class="overflow-y-auto w-full max-h-full py-6 flex items-center justify-center">
-                                <p id="study-a-text" class="text-xl font-bold text-slate-700 leading-relaxed">Loading...</p>
+                                <p id="study-a-text" class="text-xl font-bold text-slate-700 leading-relaxed pre-wrap text-left w-full px-2">Loading...</p>
                             </div>
                         </div>
                     </div>
@@ -211,8 +282,8 @@
             </div>
         </div>
 
-        <!-- Floating Action Button for Study List (Smaller, Book Icon) -->
-        <button id="btn-list-view" class="fixed bottom-6 right-6 bg-white text-indigo-600 w-12 h-12 rounded-full shadow-lg shadow-indigo-100 flex items-center justify-center active:scale-90 transition z-50 hover:bg-indigo-50" aria-label="Study Mode">
+        <!-- Floating Action Button for Study List (Book Icon) -->
+        <button id="btn-list-view" class="fixed bottom-6 right-6 bg-white text-indigo-600 w-12 h-12 rounded-full shadow-lg shadow-indigo-100 flex items-center justify-center active:scale-90 transition z-50 border-2 border-indigo-50 hover:bg-indigo-50" aria-label="Study Mode">
             <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -231,117 +302,222 @@
         </div>
 
         <!-- Floating Back Button (White Icon) -->
-        <button id="btn-back-cards" class="fixed bottom-6 right-6 bg-indigo-500 text-white w-12 h-12 rounded-full shadow-lg shadow-indigo-200 flex items-center justify-center active:scale-90 transition z-50 hover:bg-indigo-600 border-[3px] border-white">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+        <button id="btn-back-cards" class="fixed bottom-6 right-6 bg-indigo-500 text-white w-12 h-12 rounded-full shadow-lg shadow-indigo-200 flex items-center justify-center active:scale-90 transition z-50 hover:bg-indigo-600 border-[3px] border-indigo-100">
+            <svg width="24" height="24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                 <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
             </svg>
         </button>
     </div>
 
     <!-- COMPLETION VIEW -->
-    <div id="view-complete" class="view items-center justify-center p-6 text-center">
+    <div id="view-complete" class="view items-center justify-center p-6 text-center bg-[#f0f4ff]">
         <h1 class="text-4xl font-bold text-slate-800 mb-4">You Rock! 🚀</h1>
-        <p class="text-slate-500 font-bold mb-10 text-lg">You've finished the whole deck.</p>
+        <p class="text-slate-500 font-bold mb-10 text-lg">You've finished the chapter.</p>
         
-        <div class="flex flex-col gap-4 w-full max-w-xs">
+        <div class="flex flex-col gap-4 w-full max-w-xs mx-auto">
             <button id="btn-review-missed" class="bg-indigo-50 border-2 border-indigo-100 text-indigo-700 font-bold py-4 rounded-2xl text-lg hidden active:scale-95 transition">
                 Review Missed
             </button>
             <button id="btn-restart-all" class="bg-slate-800 text-white font-bold py-4 rounded-2xl text-lg active:scale-95 transition shadow-lg shadow-slate-300">
                 Play Again
             </button>
+            <button onclick="goHome()" class="bg-white border-2 border-slate-200 text-slate-600 font-bold py-4 rounded-2xl text-lg active:scale-95 transition mt-2">
+                Back to Chapters
+            </button>
         </div>
     </div>
 
     <script>
-        const ALL_QUESTIONS = [
-            { id: 1, q: "1. What are the two basic components of a computer system?", a: "The two basic components of a computer system are hardware and software." },
-            { id: 2, q: "2. What is computer hardware?", a: "Computer hardware consists of the physical components that make up a computer system." },
-            { id: 3, q: "3. Why is hardware described as the physical component of a computer system?", a: "Hardware is described as physical because it consists of components that can be seen, touched and felt." },
-            { id: 4, q: "4. Give four examples of computer hardware mentioned in the chapter.", a: "Examples include the keyboard, mouse and monitor. The chapter uses these as examples of hardware." },
-            { id: 5, q: "5. What is computer software?", a: "Software is a computer program written to carry out a particular task on the computer." },
-            { id: 6, q: "6. Why can software not be seen or touched in the same manner as hardware?", a: "Software consists of programs and instructions rather than physical components, so it cannot be physically seen, touched or felt like hardware." },
-            { id: 7, q: "7. What is the principal function of software in a computer system?", a: "Software provides instructions to the computer for carrying out particular tasks." },
-            { id: 8, q: "8. Give three examples of computer software mentioned in the chapter.", a: "Examples given are MS Paint, MS Windows and Logo." },
-            { id: 9, q: "9. Explain the relationship between hardware and software using the television analogy given in the chapter.", a: "Hardware can be compared to a television, while software can be compared to the program being viewed on the television." },
-            { id: 10, q: "10. Why is hardware of no use if there is no software operating it?", a: "Hardware requires software to provide the instructions necessary for carrying out tasks; therefore, hardware cannot perform useful operations without software." },
-            { id: 11, q: "11. What are the two main types of computer software?", a: "The two main types are System software and Application software." },
-            { id: 12, q: "12. What is system software?", a: "System software is software that controls the operation of a computer." },
-            { id: 13, q: "13. What role does system software play in the operation of a computer?", a: "System software controls the operation of the computer and helps in the running of other software." },
-            { id: 14, q: "14. How does system software assist in the running of other software?", a: "It provides the basic environment and functions required for other software to operate on the computer." },
-            { id: 15, q: "15. What hardware resources does system software monitor according to the chapter?", a: "It monitors hardware such as the memory and CPU." },
-            { id: 16, q: "16. Which three categories of programs are included under system software?", a: "System software includes the operating system, language processors and utility programs." },
-            { id: 17, q: "17. Of the components of system software, which one is described as the most important?", a: "The operating system is described as the most important system software." },
-            { id: 18, q: "18. What is the role of a system's programmer?", a: "The person who develops software for the system is referred to as a system's programmer." },
-            { id: 19, q: "19. What is an operating system?", a: "An operating system is the basic software present in a computer that enables the user to work with the hardware." },
-            { id: 20, q: "20. Why is the operating system described as the basic software present in a computer?", a: "It provides the fundamental functions required for the user to work with the computer hardware and for other programs to operate." },
-            { id: 21, q: "21. How does an operating system enable a user to work with computer hardware?", a: "It communicates with the hardware, thereby allowing the user and other programs to interact with the computer's hardware." },
-            { id: 22, q: "22. What does an operating system do in relation to the hardware?", a: "An operating system communicates with and manages the hardware of the computer." },
-            { id: 23, q: "23. What does an operating system do in relation to other programs?", a: "It monitors other programs running on the computer." },
-            { id: 24, q: "24. How does an operating system help users manage files and folders?", a: "It helps users manage files and folders used to store information on the computer." },
-            { id: 25, q: "25. Where is information stored according to the explanation of the operating system?", a: "Information is stored in files and folders on the computer." },
-            { id: 26, q: "26. Name the three operating systems given as examples in the chapter.", a: "The examples are Windows, Mac OS X and Linux." },
-            { id: 27, q: "27. What is a language processor, also called a translator?", a: "A language processor or translator is software that converts a program written in a computer language into machine language that the computer can understand." },
-            { id: 28, q: "28. Why is a language processor necessary when programs are written in computer languages such as Java, C and C++?", a: "A computer cannot directly understand these computer languages because it understands binary or machine language. The language processor converts the program into a form the computer can understand." },
-            { id: 29, q: "29. Name three computer languages mentioned in the chapter.", a: "The chapter mentions Java, C and C++." },
-            { id: 30, q: "30. Why cannot a computer directly understand most computer programming languages?", a: "A computer understands only binary or machine language, which consists of 0s and 1s." },
-            { id: 31, q: "31. What is meant by binary or machine language?", a: "Binary or machine language is the language understood by a computer and consists of 0s and 1s." },
-            { id: 32, q: "32. Which two digits constitute the binary or machine language referred to in the chapter?", a: "The two digits are 0 and 1." },
-            { id: 33, q: "33. What is the principal function of a language processor?", a: "Its principal function is to convert computer language into machine language that a computer can understand." },
-            { id: 34, q: "34. What are utility programs?", a: "Utility programs are programs that help the computer perform better and play an important role in the regular upkeep and maintenance of the computer." },
-            { id: 35, q: "35. How do utility programs contribute to the performance of a computer?", a: "They help the computer perform better by carrying out various maintenance and management tasks." },
-            { id: 36, q: "36. What role do utility programs play in the regular upkeep and maintenance of a computer?", a: "They perform tasks concerned with the upkeep, maintenance and proper functioning of the computer." },
-            { id: 37, q: "37. Where are utility programs often built in?", a: "Utility programs often built into the operating system." },
-            { id: 38, q: "38. What is Win Zip, according to the chapter?", a: "Win Zip is given as an example of a utility program." },
-            { id: 39, q: "39. What does Win Zip do with files?", a: "Win Zip compresses files." },
-            { id: 40, q: "40. Name four tasks for which utility programs are used according to the chapter.", a: "Utility programs are used for tasks such as file repair, backing up data, dealing with virus attacks and disk defragmentation." },
-            { id: 41, q: "41. What is application software?", a: "Application software is software written to do a particular task on the computer." },
-            { id: 42, q: "42. How does application software differ in purpose from system software?", a: "System software controls the operation of the computer and supports other software, whereas application software is designed to enable the user to perform a specific task." },
-            { id: 43, q: "43. Why is application software installed additionally on a computer?", a: "Application software is installed according to the exact requirements of the user, since different users require software for different tasks." },
-            { id: 44, q: "44. Name four examples of application software given in the chapter.", a: "Examples include school management software, movie ticket booking software, result processing software and word-processing software." },
-            { id: 45, q: "45. What are the two types of application software?", a: "The two types are General-Purpose application software and Tailor-Made application software." },
-            { id: 46, q: "46. What is general-purpose application software?", a: "General-purpose application software is software designed to satisfy the common needs of people." },
-            { id: 47, q: "47. Why is general-purpose software commonly purchased “off-the-shelf”?", a: "Most computer users purchase general-purpose software already developed and readily available in the market, since it is designed to satisfy common requirements." },
-            { id: 48, q: "48. Using the example given in the chapter, why would a person purchase MS Paint rather than employ a programmer to develop drawing software?", a: "A person who needs software for drawing and painting can purchase MS Paint, which already performs the required function, rather than employing a programmer to develop a separate program." },
-            { id: 49, q: "49. State four reasons given in the chapter for using general-purpose software.", a: "General-purpose software is: Relatively cheap. Readily available and can be installed quickly and easily. Usually thoroughly tested, so there is very little chance of errors. Well supported through books, online help and Internet discussions." },
-            { id: 50, q: "50. What limitation does a customer face when purchasing general-purpose software with respect to making special changes to it?", a: "When customers purchase general-purpose software, they cannot ask for special changes to be made specifically for them." },
-            { id: 51, q: "51. What are database packages used for?", a: "They are used to store and retrieve information." },
-            { id: 52, q: "52. Name the database software given in the chapter.", a: "MS Access, Lotus Approach, Paradox, Oracle and Visual FoxPro." },
-            { id: 53, q: "53. What are spreadsheet packages used for?", a: "They perform tasks involving calculations and the creation of graphs and charts based on data." },
-            { id: 54, q: "54. Name the spreadsheet software given in the chapter.", a: "MS Excel and Lotus 123." },
-            { id: 55, q: "55. What are word-processing packages used for?", a: "They create text-based documents such as letters, reports and memos." },
-            { id: 56, q: "56. Name the word-processing software given.", a: "MS Word and Word Perfect." },
-            { id: 57, q: "57. What are Desktop Publishing (DTP) packages used for?", a: "They produce professional-quality publications, such as posters, books, newsletters, newspapers and magazines." },
-            { id: 58, q: "58. Name the DTP software given in the chapter.", a: "MS Publisher, PageMaker, Page Plus and Adobe InDesign." },
-            { id: 59, q: "59. What are graphics packages used for?", a: "They help perform tasks involving artwork, such as modifying pictures." },
-            { id: 60, q: "60. Name the graphics software given.", a: "Paint, Paint Brush, Serif Draw and Corel Draw." },
-            { id: 61, q: "61. What are presentation graphics packages used for?", a: "They are used to create slideshows and presentations." },
-            { id: 62, q: "62. Name the presentation graphics software given.", a: "PowerPoint, Lotus Freelance and Photoshop." },
-            { id: 63, q: "63. What are Computer-Aided Design (CAD) packages used for?", a: "They help perform tasks involving engineering designs and architectural plans, such as designing a building layout or an automobile." },
-            { id: 64, q: "64. Name the CAD software given in the chapter.", a: "2D-Design, AutoCAD and Turbo CAD." },
-            { id: 65, q: "65. What is tailor-made software?", a: "Tailor-made software is software made according to the specific requirements of a customer." },
-            { id: 66, q: "66. When might an organization decide to have tailor-made software developed?", a: "An organization may choose tailor-made software when the general-purpose software readily available in the market cannot perform exactly what the organization requires." },
-            { id: 67, q: "67. Give the example of tailor-made software provided in the chapter.", a: "A school may have result-processing software developed especially for it by a programmer." },
-            { id: 68, q: "68. Why is tailor-made software also called customized software?", a: "It is called customized software because it is made according to the specific requirements of the customer." },
-            { id: 69, q: "69. What is the fundamental difference between general-purpose and tailor-made software?", a: "General-purpose software is designed to satisfy common needs, whereas tailor-made software is created to satisfy the specific needs of a particular customer or organization." },
-            { id: 70, q: "70. What are the main drawbacks of tailor-made software?", a: "The main drawbacks are the high cost involved and the long development time that such programs may require." },
-            { id: 71, q: "71. Why can tailor-made software be expensive?", a: "It is developed specifically according to the requirements of a particular customer, which involves custom development and therefore higher cost." },
-            { id: 72, q: "72. Why can tailor-made software take a long time to develop?", a: "Since it must be developed according to the specific requirements of the customer, its development may require considerable time." },
-            { id: 73, q: "73. What examples of tailor-made software are mentioned in the “Let’s Recall” section?", a: "The examples given are payroll software and railway reservation software." },
-            { id: 74, q: "74. According to the “Let’s Recall” section, what is software?", a: "Software is a set of programs designed to perform a well-defined task." },
-            { id: 75, q: "75. According to the “Let’s Recall” section, what is a program?", a: "A program is a sequence of instructions written to solve a particular problem." },
-            { id: 76, q: "76. What does system software include according to the “Let’s Recall” section?", a: "System software includes the operating system, language processors and utility programs, which enable a computer system to operate." },
-            { id: 77, q: "77. What tasks do utilities perform according to the “Let’s Recall” section?", a: "Utilities perform tasks related to the management of computer functions, such as disk repair and data backup." },
-            { id: 78, q: "78. What is the purpose of application software according to the “Let’s Recall” section?", a: "Application software is designed to perform a particular task." },
-            { id: 79, q: "79. What is general-purpose application software designed to do?", a: "It is designed to satisfy the common needs of a person or an organization." },
-            { id: 80, q: "80. What is tailor-made application software designed to do?", a: "It is created to satisfy the specific needs of a person or an organization." }
-        ];
+        const CHAPTER_DATA = {
+            'ch2': [
+                { id: 201, q: "1. What are the two basic components of a computer system?", a: "The two basic components of a computer system are hardware and software." },
+                { id: 202, q: "2. What is computer hardware?", a: "Computer hardware consists of the physical components that make up a computer system." },
+                { id: 203, q: "3. Why is hardware described as the physical component of a computer system?", a: "Hardware is described as physical because it consists of components that can be seen, touched and felt." },
+                { id: 204, q: "4. Give four examples of computer hardware mentioned in the chapter.", a: "Examples include the keyboard, mouse and monitor. The chapter uses these as examples of hardware." },
+                { id: 205, q: "5. What is computer software?", a: "Software is a computer program written to carry out a particular task on the computer." },
+                { id: 206, q: "6. Why can software not be seen or touched in the same manner as hardware?", a: "Software consists of programs and instructions rather than physical components, so it cannot be physically seen, touched or felt like hardware." },
+                { id: 207, q: "7. What is the principal function of software in a computer system?", a: "Software provides instructions to the computer for carrying out particular tasks." },
+                { id: 208, q: "8. Give three examples of computer software mentioned in the chapter.", a: "Examples given are MS Paint, MS Windows and Logo." },
+                { id: 209, q: "9. Explain the relationship between hardware and software using the television analogy given in the chapter.", a: "Hardware can be compared to a television, while software can be compared to the program being viewed on the television." },
+                { id: 210, q: "10. Why is hardware of no use if there is no software operating it?", a: "Hardware requires software to provide the instructions necessary for carrying out tasks; therefore, hardware cannot perform useful operations without software." },
+                { id: 211, q: "11. What are the two main types of computer software?", a: "The two main types are System software and Application software." },
+                { id: 212, q: "12. What is system software?", a: "System software is software that controls the operation of a computer." },
+                { id: 213, q: "13. What role does system software play in the operation of a computer?", a: "System software controls the operation of the computer and helps in the running of other software." },
+                { id: 214, q: "14. How does system software assist in the running of other software?", a: "It provides the basic environment and functions required for other software to operate on the computer." },
+                { id: 215, q: "15. What hardware resources does system software monitor according to the chapter?", a: "It monitors hardware such as the memory and CPU." },
+                { id: 216, q: "16. Which three categories of programs are included under system software?", a: "System software includes the operating system, language processors and utility programs." },
+                { id: 217, q: "17. Of the components of system software, which one is described as the most important?", a: "The operating system is described as the most important system software." },
+                { id: 218, q: "18. What is the role of a system's programmer?", a: "The person who develops software for the system is referred to as a system's programmer." },
+                { id: 219, q: "19. What is an operating system?", a: "An operating system is the basic software present in a computer that enables the user to work with the hardware." },
+                { id: 220, q: "20. Why is the operating system described as the basic software present in a computer?", a: "It provides the fundamental functions required for the user to work with the computer hardware and for other programs to operate." },
+                { id: 221, q: "21. How does an operating system enable a user to work with computer hardware?", a: "It communicates with the hardware, thereby allowing the user and other programs to interact with the computer's hardware." },
+                { id: 222, q: "22. What does an operating system do in relation to the hardware?", a: "An operating system communicates with and manages the hardware of the computer." },
+                { id: 223, q: "23. What does an operating system do in relation to other programs?", a: "It monitors other programs running on the computer." },
+                { id: 224, q: "24. How does an operating system help users manage files and folders?", a: "It helps users manage files and folders used to store information on the computer." },
+                { id: 225, q: "25. Where is information stored according to the explanation of the operating system?", a: "Information is stored in files and folders on the computer." },
+                { id: 226, q: "26. Name the three operating systems given as examples in the chapter.", a: "The examples are Windows, Mac OS X and Linux." },
+                { id: 227, q: "27. What is a language processor, also called a translator?", a: "A language processor or translator is software that converts a program written in a computer language into machine language that the computer can understand." },
+                { id: 228, q: "28. Why is a language processor necessary when programs are written in computer languages such as Java, C and C++?", a: "A computer cannot directly understand these computer languages because it understands binary or machine language. The language processor converts the program into a form the computer can understand." },
+                { id: 229, q: "29. Name three computer languages mentioned in the chapter.", a: "The chapter mentions Java, C and C++." },
+                { id: 230, q: "30. Why cannot a computer directly understand most computer programming languages?", a: "A computer understands only binary or machine language, which consists of 0s and 1s." },
+                { id: 231, q: "31. What is meant by binary or machine language?", a: "Binary or machine language is the language understood by a computer and consists of 0s and 1s." },
+                { id: 232, q: "32. Which two digits constitute the binary or machine language referred to in the chapter?", a: "The two digits are 0 and 1." },
+                { id: 233, q: "33. What is the principal function of a language processor?", a: "Its principal function is to convert computer language into machine language that a computer can understand." },
+                { id: 234, q: "34. What are utility programs?", a: "Utility programs are programs that help the computer perform better and play an important role in the regular upkeep and maintenance of the computer." },
+                { id: 235, q: "35. How do utility programs contribute to the performance of a computer?", a: "They help the computer perform better by carrying out various maintenance and management tasks." },
+                { id: 236, q: "36. What role do utility programs play in the regular upkeep and maintenance of a computer?", a: "They perform tasks concerned with the upkeep, maintenance and proper functioning of the computer." },
+                { id: 237, q: "37. Where are utility programs often built in?", a: "Utility programs are often built into the operating system." },
+                { id: 238, q: "38. What is Win Zip, according to the chapter?", a: "Win Zip is given as an example of a utility program." },
+                { id: 239, q: "39. What does Win Zip do with files?", a: "Win Zip compresses files." },
+                { id: 240, q: "40. Name four tasks for which utility programs are used according to the chapter.", a: "Utility programs are used for tasks such as file repair, backing up data, dealing with virus attacks and disk defragmentation." },
+                { id: 241, q: "41. What is application software?", a: "Application software is software written to do a particular task on the computer." },
+                { id: 242, q: "42. How does application software differ in purpose from system software?", a: "System software controls the operation of the computer and supports other software, whereas application software is designed to enable the user to perform a specific task." },
+                { id: 243, q: "43. Why is application software installed additionally on a computer?", a: "Application software is installed according to the exact requirements of the user, since different users require software for different tasks." },
+                { id: 244, q: "44. Name four examples of application software given in the chapter.", a: "Examples include school management software, movie ticket booking software, result processing software and word-processing software." },
+                { id: 245, q: "45. What are the two types of application software?", a: "The two types are General-Purpose application software and Tailor-Made application software." },
+                { id: 246, q: "46. What is general-purpose application software?", a: "General-purpose application software is software designed to satisfy the common needs of people." },
+                { id: 247, q: "47. Why is general-purpose software commonly purchased “off-the-shelf”?", a: "Most computer users purchase general-purpose software already developed and readily available in the market, since it is designed to satisfy common requirements." },
+                { id: 248, q: "48. Using the example given in the chapter, why would a person purchase MS Paint rather than employ a programmer to develop drawing software?", a: "A person who needs software for drawing and painting can purchase MS Paint, which already performs the required function, rather than employing a programmer to develop a separate program." },
+                { id: 249, q: "49. State four reasons given in the chapter for using general-purpose software.", a: "General-purpose software is: Relatively cheap. Readily available and can be installed quickly and easily. Usually thoroughly tested, so there is very little chance of errors. Well supported through books, online help and Internet discussions." },
+                { id: 250, q: "50. What limitation does a customer face when purchasing general-purpose software with respect to making special changes to it?", a: "When customers purchase general-purpose software, they cannot ask for special changes to be made specifically for them." },
+                { id: 251, q: "51. What are database packages used for?", a: "They are used to store and retrieve information." },
+                { id: 252, q: "52. Name the database software given in the chapter.", a: "MS Access, Lotus Approach, Paradox, Oracle and Visual FoxPro." },
+                { id: 253, q: "53. What are spreadsheet packages used for?", a: "They perform tasks involving calculations and the creation of graphs and charts based on data." },
+                { id: 254, q: "54. Name the spreadsheet software given in the chapter.", a: "MS Excel and Lotus 123." },
+                { id: 255, q: "55. What are word-processing packages used for?", a: "They create text-based documents such as letters, reports and memos." },
+                { id: 256, q: "56. Name the word-processing software given.", a: "MS Word and Word Perfect." },
+                { id: 257, q: "57. What are Desktop Publishing (DTP) packages used for?", a: "They produce professional-quality publications, such as posters, books, newsletters, newspapers and magazines." },
+                { id: 258, q: "58. Name the DTP software given in the chapter.", a: "MS Publisher, PageMaker, Page Plus and Adobe InDesign." },
+                { id: 259, q: "59. What are graphics packages used for?", a: "They help perform tasks involving artwork, such as modifying pictures." },
+                { id: 260, q: "60. Name the graphics software given.", a: "Paint, Paint Brush, Serif Draw and Corel Draw." },
+                { id: 261, q: "61. What are presentation graphics packages used for?", a: "They are used to create slideshows and presentations." },
+                { id: 262, q: "62. Name the presentation graphics software given.", a: "PowerPoint, Lotus Freelance and Photoshop." },
+                { id: 263, q: "63. What are Computer-Aided Design (CAD) packages used for?", a: "They help perform tasks involving engineering designs and architectural plans, such as designing a building layout or an automobile." },
+                { id: 264, q: "64. Name the CAD software given in the chapter.", a: "2D-Design, AutoCAD and Turbo CAD." },
+                { id: 265, q: "65. What is tailor-made software?", a: "Tailor-made software is software made according to the specific requirements of a customer." },
+                { id: 266, q: "66. When might an organization decide to have tailor-made software developed?", a: "An organization may choose tailor-made software when the general-purpose software readily available in the market cannot perform exactly what the organization requires." },
+                { id: 267, q: "67. Give the example of tailor-made software provided in the chapter.", a: "A school may have result-processing software developed especially for it by a programmer." },
+                { id: 268, q: "68. Why is tailor-made software also called customized software?", a: "It is called customized software because it is made according to the specific requirements of the customer." },
+                { id: 269, q: "69. What is the fundamental difference between general-purpose and tailor-made software?", a: "General-purpose software is designed to satisfy common needs, whereas tailor-made software is created to satisfy the specific needs of a particular customer or organization." },
+                { id: 270, q: "70. What are the main drawbacks of tailor-made software?", a: "The main drawbacks are the high cost involved and the long development time that such programs may require." },
+                { id: 271, q: "71. Why can tailor-made software be expensive?", a: "It is developed specifically according to the requirements of a particular customer, which involves custom development and therefore higher cost." },
+                { id: 272, q: "72. Why can tailor-made software take a long time to develop?", a: "Since it must be developed according to the specific requirements of the customer, its development may require considerable time." },
+                { id: 273, q: "73. What examples of tailor-made software are mentioned in the “Let’s Recall” section?", a: "The examples given are payroll software and railway reservation software." },
+                { id: 274, q: "74. According to the “Let’s Recall” section, what is software?", a: "Software is a set of programs designed to perform a well-defined task." },
+                { id: 275, q: "75. According to the “Let’s Recall” section, what is a program?", a: "A program is a sequence of instructions written to solve a particular problem." },
+                { id: 276, q: "76. What does system software include according to the “Let’s Recall” section?", a: "System software includes the operating system, language processors and utility programs, which enable a computer system to operate." },
+                { id: 277, q: "77. What tasks do utilities perform according to the “Let’s Recall” section?", a: "Utilities perform tasks related to the management of computer functions, such as disk repair and data backup." },
+                { id: 278, q: "78. What is the purpose of application software according to the “Let’s Recall” section?", a: "Application software is designed to perform a particular task." },
+                { id: 279, q: "79. What is general-purpose application software designed to do?", a: "It is designed to satisfy the common needs of a person or an organization." },
+                { id: 280, q: "80. What is tailor-made application software designed to do?", a: "It is created to satisfy the specific needs of a person or an organization." }
+            ],
+            'ch3': [
+                { id: 301, q: "Q1. What is line spacing?", a: "The space between two adjacent lines of a paragraph is known as the line spacing." },
+                { id: 302, q: "Q2. How do you change the line spacing of a paragraph?", a: "1. Select the paragraph.\n2. Click on the Home tab.\n3. Go to the Paragraph group and click on Line and Paragraph Spacing.\n4. From the drop-down list, choose the required line spacing." },
+                { id: 303, q: "Q3. What is paragraph spacing?", a: "The vertical space before and after a paragraph is known as the paragraph spacing." },
+                { id: 304, q: "Q4. How do you change the paragraph spacing?", a: "1. Select the paragraph.\n2. Click on the Home tab.\n3. Go to the Paragraph group and click on Line and Paragraph Spacing.\n4. From the drop-down list, choose the required paragraph spacing option." },
+                { id: 305, q: "Q5. What is an indent?", a: "Indents are used in a paragraph to set the starting or ending points of the line on the page." },
+                { id: 306, q: "Q6. How many types of indents are there?", a: "There are 4 types of indents." },
+                { id: 307, q: "Q7. Name the four types of indents.", a: "The four types of indents are:\n- Left Indent\n- Right Indent\n- First Line Indent\n- Hanging Indent" },
+                { id: 308, q: "Q8. What is Left Indent?", a: "Left Indent sets the starting point of the line." },
+                { id: 309, q: "Q9. What is Right Indent?", a: "Right Indent sets the finishing point of the line." },
+                { id: 310, q: "Q10. What is First Line Indent?", a: "First Line Indent sets the starting point of the first line of a paragraph." },
+                { id: 311, q: "Q11. What is Hanging Indent?", a: "Hanging Indent sets the starting point of all lines except the first." },
+                { id: 312, q: "Q12. How do you set indents?", a: "1. Click on the sideways arrow button at the bottom-right corner of the Paragraph group.\n2. The Paragraph dialog box appears.\n3. Set the required indent.\n4. Click OK." },
+                { id: 313, q: "Q13. How can you increase or decrease an indent?", a: "You may increase or decrease the indents from the Home tab by using the Increase Indent and Decrease Indent buttons." },
+                { id: 314, q: "Q14. What is a page margin?", a: "The blank white space left on all sides of the page after the text has been placed is known as the page margin." },
+                { id: 315, q: "Q15. What are the four margins of a page?", a: "The four margins are Top Margin, Bottom Margin, Left Margin and Right Margin." },
+                { id: 316, q: "Q16. How do you set page margins?", a: "1. Click on the Page Layout tab.\n2. Click on the Margins option.\n3. A drop-down list of margins appears.\n4. Choose the required margin option." },
+                { id: 317, q: "Q17. What is page orientation?", a: "Page orientation may be defined as a way of setting how the document will be printed." },
+                { id: 318, q: "Q18. How many types of page orientation are there?", a: "There are two types of page orientation." },
+                { id: 319, q: "Q19. Name the two types of page orientation.", a: "The two types are Portrait and Landscape." },
+                { id: 320, q: "Q20. What is Portrait orientation?", a: "In Portrait, the document is printed along the longer side, i.e. length-wise." },
+                { id: 321, q: "Q21. What is Landscape orientation?", a: "In Landscape, the document is printed along the shorter side, i.e. breadth-wise." },
+                { id: 322, q: "Q22. How do you change the page orientation?", a: "1. Click on the Page Layout tab.\n2. Click on Orientation.\n3. A drop-down list appears.\n4. Choose the suitable orientation and click on it." },
+                { id: 323, q: "Q23. What is a watermark?", a: "A watermark can be defined as a light imprint behind the text, on every page of an MS-Word document." },
+                { id: 324, q: "Q24. Why are watermarks useful?", a: "Watermarks are useful in official documents and reports to avoid counterfeiting and direct plagiarism." },
+                { id: 325, q: "Q25. How do you add a watermark?", a: "1. Click on the Design tab.\n2. Click on Watermark.\n3. A drop-down list of watermarks appears.\n4. Choose the suitable watermark." },
+                { id: 326, q: "Q26. Can you add a custom watermark?", a: "Yes. Instead of the default text as the watermark, you may even add a picture or a text of your choice as a custom watermark." },
+                { id: 327, q: "Q27. How do you add a custom picture as a watermark?", a: "1. Open the Watermark option.\n2. Click on Custom Watermark.\n3. The Printed Watermark dialog box appears.\n4. Select Picture Watermark.\n5. Click on Select Picture.\n6. Choose the suitable picture.\n7. Click Insert.\n8. The selected picture is inserted as a watermark." },
+                { id: 328, q: "Q28. Can the opacity of a watermark be adjusted?", a: "Yes. The opacity of the watermark can also be adjusted." },
+                { id: 329, q: "Q29. What is a page border?", a: "In order to make the page look more attractive, we can add a border to it as its outline." },
+                { id: 330, q: "Q30. What types of page borders are shown in the chapter?", a: "The chapter shows Plain and Artistic page borders." },
+                { id: 331, q: "Q31. How do you add a page border?", a: "1. Click on the Design tab.\n2. Click on Page Borders.\n3. The Borders and Shading dialog box appears.\n4. Click on the Page Border tab.\n5. Choose the required style, colour and width of the border.\n6. Click OK." },
+                { id: 332, q: "Q32. What is page shading?", a: "The presentation and appeal of a page may be further enhanced by filling it with a colour shade." },
+                { id: 333, q: "Q33. How do you fill a page with colour?", a: "1. Click on the Design tab.\n2. Click on Page Colour.\n3. A list of colours will appear.\n4. Select the colour and shade of your choice.\n5. The selected colour will be applied on the page." },
+                { id: 334, q: "Q34. What are columns in MS Word?", a: "Newspapers and magazines are very different from a Word document. They comprise of more than one column of text on the same page. This can also be done in MS Word." },
+                { id: 335, q: "Q35. How do you insert columns in a Word document?", a: "1. Click on the Page Layout tab.\n2. Click Columns.\n3. A drop-down list appears.\n4. Choose the required number of columns.\n5. If you want to add more than three columns, click on More Columns.\n6. Select the required number of columns.\n7. Click OK." },
+                { id: 336, q: "Q36. What is a column break?", a: "You may insert a column break if you want a particular text to be at the beginning of a column. Anything that appears after a column break is shown at the beginning of a new adjacent column." },
+                { id: 337, q: "Q37. What happens when new text is added to a column?", a: "The text adjusts itself automatically and flows to the next columns." },
+                { id: 338, q: "Q38. How do you insert a column break?", a: "1. Click on the Page Layout tab.\n2. Click on the Breaks option.\n3. A drop-down list appears.\n4. Click on Column." },
+                { id: 339, q: "Q39. What is a header?", a: "Any text or image placed at the top of a page is known as a header." },
+                { id: 340, q: "Q40. What is a footer?", a: "Footer is any image or text placed at the bottom of a page." },
+                { id: 341, q: "Q41. What can be inserted in a header or footer?", a: "Text, images, symbols and page numbers can be inserted in a header or footer." },
+                { id: 342, q: "Q42. How do you insert a header?", a: "1. Click on the Insert tab.\n2. Click Header.\n3. A drop-down list appears.\n4. Choose the style of the header as per your choice.\n5. The header will appear at the top of the page.\n6. You may customise the text of the header." },
+                { id: 343, q: "Q43. How do you insert a footer?", a: "1. Click on the Insert tab.\n2. Click Footer.\n3. A drop-down list appears.\n4. Choose the style of the footer as per your choice.\n5. The footer will appear at the bottom of the page.\n6. You may customise the text of the footer." },
+                { id: 344, q: "Q44. Are headers and footers applied to all pages of a document?", a: "Yes. The headers and footers are applied to all pages of the document at once." },
+                { id: 345, q: "Q45. How do you print a document in MS Word?", a: "1. Click on the File tab.\n2. Click on Print.\n3. Choose the printer destination.\n4. Choose the required number of copies.\n5. Select the required print settings.\n6. Print the document." }
+            ],
+            'ch4': [
+                { id: 401, q: "Q1. Why can a Word document be made more interesting and attractive?", a: "A Word document can be made more interesting and attractive by adding illustrations, pictures, symbols and shapes." },
+                { id: 402, q: "Q2. What is a ClipArt?", a: "A ClipArt is a graphic or a picture which can be added to a document." },
+                { id: 403, q: "Q3. Where can a picture be inserted from in MS-Word 2013?", a: "A picture stored on the computer can be added to a Word file." },
+                { id: 404, q: "Q4. How do you insert a picture from a file in MS-Word 2013?", a: "1. Click on the Insert tab.\n2. Click on Picture to open the Insert Picture dialog box.\n3. Locate the picture you are looking for.\n4. Look through all the available options and select the required picture.\n5. Click on the picture and click on the Insert button.\n6. The picture is added to the document. You can move it wherever you want." },
+                { id: 405, q: "Q5. What is resizing a picture?", a: "Resizing a picture means changing its size. A picture can be made larger or smaller and can even be made longer or broader." },
+                { id: 406, q: "Q6. What happens when a picture is inserted in MS-Word?", a: "Four squares appear at the centre of each side of the picture. Corner squares also appear." },
+                { id: 407, q: "Q7. How are the squares used to resize a picture?", a: "The corner squares are used to resize the picture in respective directions. The centre squares can be dragged to change the size of the picture." },
+                { id: 408, q: "Q8. What happens when a corner square is dragged?", a: "The picture becomes smaller or larger while maintaining its proportions." },
+                { id: 409, q: "Q9. What happens when a centre square is dragged?", a: "The picture becomes broader or longer according to the direction in which the square is dragged." },
+                { id: 410, q: "Q10. What is cropping?", a: "Cropping helps us to remove the unwanted part of an image. It is the part that we do not wish to keep in the file." },
+                { id: 411, q: "Q11. How do you crop a picture in MS-Word 2013?", a: "1. Click on the picture.\n2. Click on the Format tab.\n3. Click on Crop.\n4. Drag inwards the areas you want to delete.\n5. Black colour handles appear on the corners and sides of the image.\n6. Press Enter when you have finished." },
+                { id: 412, q: "Q12. Can styles be added to a picture in MS-Word?", a: "Yes, several attractive styles can be added to a picture with the help of MS-Word." },
+                { id: 413, q: "Q13. How do you add a style to a picture?", a: "1. Select the picture you want to add a style to.\n2. Click on the Format tab.\n3. Choose the style of your choice." },
+                { id: 414, q: "Q14. What is WordArt?", a: "WordArt is used to add special and attractive effects to the text in a Word document." },
+                { id: 415, q: "Q15. Where can WordArt be inserted from?", a: "WordArt can be inserted from the Insert tab." },
+                { id: 416, q: "Q16. How do you insert WordArt in a Word document?", a: "1. Click on the Insert tab.\n2. Click on WordArt to open the drop-down list of WordArt styles.\n3. Choose the style of your choice.\n4. A box will appear with the words “Your text here” written inside it.\n5. Type whatever text you like.\n6. Click on the WordArt styles group on the Format tab to apply the chosen style.\n7. Move the WordArt to the place where you want it." },
+                { id: 417, q: "Q17. Can WordArt be formatted after it has been inserted?", a: "Yes, after a WordArt has been inserted in a document, it can be further formatted." },
+                { id: 418, q: "Q18. What can be changed in WordArt?", a: "The colour, outline and text effects of WordArt can be changed." },
+                { id: 419, q: "Q19. How do you change the colour of WordArt?", a: "1. Select the WordArt.\n2. Click on the Format tab.\n3. Click on the Text Fill drop-down arrow to open the list of colours.\n4. Choose any colour.\n5. If you do not want to fill the colour, click on the No Fill option." },
+                { id: 420, q: "Q20. How do you change the outline colour of WordArt?", a: "1. Select the WordArt.\n2. Click on the Format tab.\n3. Click on the Text Outline drop-down arrow.\n4. Choose the colour of your choice.\n5. If you do not want to fill any colour, click on the No Fill option." },
+                { id: 421, q: "Q21. How do you add a shadow effect to WordArt?", a: "1. Select the WordArt.\n2. Click on the Format tab.\n3. Click on the Text Effects drop-down arrow.\n4. Choose the Shadow option." },
+                { id: 422, q: "Q22. Which other effects can be added to WordArt?", a: "Reflection and glow effects can also be added to WordArt using the same method." },
+                { id: 423, q: "Q23. How can you edit WordArt?", a: "You can simply click on a WordArt and edit it using the Backspace key and Enter the text you wish to type." },
+                { id: 424, q: "Q24. Can the text in WordArt be changed after it has been inserted?", a: "Yes, new text can be typed and the WordArt can be edited as many times as required." },
+                { id: 425, q: "Q25. How can WordArt be deleted?", a: "A WordArt can be deleted by selecting the WordArt and pressing the Delete key." },
+                { id: 426, q: "Q26. What can MS-Word be used for besides inserting pictures and WordArt?", a: "MS-Word allows you to insert different shapes." },
+                { id: 427, q: "Q27. Give examples of shapes that can be inserted in MS-Word.", a: "Shapes such as lines, ovals, triangles and squares can be inserted." },
+                { id: 428, q: "Q28. How do you insert a shape in a Word document?", a: "1. Click on the Insert tab.\n2. Click on the Shapes drop-down arrow to open a list of shapes.\n3. Choose a shape.\n4. Click on the Word file and drag to draw the shape.\n5. Release the mouse pointer when the desired shape is attained.\n6. Move the shape anywhere in the Word file." },
+                { id: 429, q: "Q29. Can shapes be given different colours and outlines?", a: "Yes, the colour and outline of shapes can be changed." },
+                { id: 430, q: "Q30. How do you change the colour of a shape?", a: "1. Click on the Shape Fill drop-down arrow.\n2. Choose the colour of your choice.\n3. The shape will be filled with that colour." },
+                { id: 431, q: "Q31. How do you change the outline colour of a shape?", a: "1. Click on the Shape Outline drop-down arrow.\n2. Choose the colour of your choice.\n3. The outline will be filled with that colour." },
+                { id: 432, q: "Q32. Can text be added inside a shape?", a: "Yes, text can be added inside a shape." },
+                { id: 433, q: "Q33. How do you add text into a shape?", a: "Select the shape and start typing. You can also right-click on the shape and select Add Text." },
+                { id: 434, q: "Q34. What does MS-Word 2013 allow you to insert from the keyboard?", a: "MS-Word 2013 allows you to add symbols to your Word file which you cannot type from your keyboard." },
+                { id: 435, q: "Q35. Why are symbols used in a Word document?", a: "Symbols are used when a character or symbol cannot be typed from the keyboard." },
+                { id: 436, q: "Q36. How do you insert a symbol in a Word document?", a: "1. Click on the Insert tab.\n2. Click on the Symbols drop-down arrow and a list of symbols will open.\n3. Select any symbol from the list or click on More Symbols.\n4. A Symbols dialog box will appear.\n5. Choose from a variety of symbols.\n6. Click on the Insert button." },
+                { id: 437, q: "Q37. Can the font size of an inserted symbol be changed?", a: "Yes, the font size of the symbol can be changed by using the tools on the Home tab." },
+                { id: 438, q: "Q38. What can be added to a Word document to make it interesting and attractive?", a: "Illustrations, pictures, symbols and shapes can be added." },
+                { id: 439, q: "Q39. What is ClipArt?", a: "ClipArt is a graphic or picture which can be added to a document." },
+                { id: 440, q: "Q40. What can be done to a picture in MS-Word 2013?", a: "A picture can be resized, cropped and given styles." },
+                { id: 441, q: "Q41. What is WordArt used for?", a: "WordArt is used to add special and attractive effects to the text in a Word file." },
+                { id: 442, q: "Q42. What types of shapes can be inserted in MS-Word?", a: "Different shapes such as lines, ovals, triangles and squares can be inserted." },
+                { id: 443, q: "Q43. What can be changed in a shape?", a: "The colour and outline of a shape can be changed." },
+                { id: 444, q: "Q44. What can be added inside a shape?", a: "Text can be added inside a shape." },
+                { id: 445, q: "Q45. What are symbols in MS-Word?", a: "Symbols are characters that can be added to a Word file when they cannot be typed from the keyboard." },
+                { id: 446, q: "Q46. Which tool is represented by the large stylised letter A?", a: "WordArt" },
+                { id: 447, q: "Q47. Which tool is represented by the picture icon?", a: "Picture" },
+                { id: 448, q: "Q48. Which tool is represented by overlapping shapes?", a: "Shapes" },
+                { id: 449, q: "Q49. Which tool is represented by the banner-like icon?", a: "WordArt" },
+                { id: 450, q: "Q50. Which tool is represented by the icon showing a picture and a screen-like shape?", a: "ClipArt" }
+            ]
+        };
 
         let state = {
+            activeChapter: '',
             activeQueue: [],
             missedCards: [],
             completedCount: 0,
-            totalInitial: ALL_QUESTIONS.length
+            totalInitial: 0
         };
 
         const swipeWrapper = document.getElementById('swipe-wrapper');
@@ -356,11 +532,22 @@
             document.getElementById(viewId).classList.add('active');
         }
 
+        function goHome() {
+            switchView('view-home');
+        }
+
+        function startChapter(chapterId) {
+            state.activeChapter = chapterId;
+            resetToFirstQuestion();
+        }
+
         function resetToFirstQuestion() {
-            state.activeQueue = ALL_QUESTIONS.map(q => q.id);
+            if(!state.activeChapter) return;
+            const currentQuestions = CHAPTER_DATA[state.activeChapter];
+            state.activeQueue = currentQuestions.map(q => q.id);
             state.missedCards = [];
             state.completedCount = 0;
-            state.totalInitial = ALL_QUESTIONS.length;
+            state.totalInitial = currentQuestions.length;
             switchView('view-study');
             renderCardData();
         }
@@ -381,7 +568,7 @@
             }
 
             const currentId = state.activeQueue[0];
-            const qObj = ALL_QUESTIONS.find(item => item.id === currentId);
+            const qObj = CHAPTER_DATA[state.activeChapter].find(item => item.id === currentId);
 
             studyQText.innerText = qObj.q;
             studyAText.innerText = qObj.a;
@@ -447,7 +634,6 @@
         document.getElementById('btn-reset').addEventListener('click', (e) => {
             const btn = e.currentTarget;
             btn.style.opacity = '0.5';
-            
             setTimeout(() => {
                 resetToFirstQuestion();
                 btn.style.opacity = '1';
@@ -456,10 +642,11 @@
 
         function buildStudyList() {
             const container = document.getElementById('qa-list-container');
-            container.innerHTML = ALL_QUESTIONS.map(item => `
+            const currentQuestions = CHAPTER_DATA[state.activeChapter];
+            container.innerHTML = currentQuestions.map(item => `
                 <div class="bg-white p-5 rounded-2xl border-2 border-slate-100 shadow-sm">
                     <p class="text-base font-bold text-slate-800 mb-2">${item.q}</p>
-                    <p class="text-sm font-semibold text-slate-500">${item.a}</p>
+                    <p class="text-[15px] font-semibold text-slate-500 pre-wrap leading-relaxed">${item.a}</p>
                 </div>
             `).join('');
         }
@@ -494,7 +681,6 @@
         document.getElementById('btn-review-missed').addEventListener('click', startMissedReview);
         document.getElementById('btn-restart-all').addEventListener('click', resetToFirstQuestion);
 
-        window.onload = resetToFirstQuestion;
     </script>
 </body>
 </html>
